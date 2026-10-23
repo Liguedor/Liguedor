@@ -1,0 +1,18 @@
+const samplePicks=[
+ {id:1,sport:'Football',league:'Exemple · Football',time:'Match à renseigner',home:'Club A',away:'Club B',homeIcon:'⚽',awayIcon:'⚽',pick:'Plus de 1,5 buts',odds:'1.72',confidence:'70%',kind:'PUBLIC',analysis:'Exemple de présentation : ajoute ici ton analyse courte et les éléments qui soutiennent ton pronostic.',status:'À venir'},
+ {id:2,sport:'Tennis',league:'Exemple · Tennis',time:'Match à renseigner',home:'Joueur A',away:'Joueur B',homeIcon:'🎾',awayIcon:'🎾',pick:'Vainqueur du match',odds:'1.68',confidence:'65%',kind:'VIP',analysis:'Exemple VIP : cette analyse complète sera réservée aux membres abonnés sur le vrai site.',status:'À venir'},
+ {id:3,sport:'Autres sports',league:'Exemple · Autres sports',time:'Match à renseigner',home:'Équipe A',away:'Équipe B',homeIcon:'✦',awayIcon:'✦',pick:'Sélection à renseigner',odds:'1.80',confidence:'60%',kind:'VIP',analysis:'Exemple de contenu VIP. Aucun pronostic affiché ici n’est un conseil réel.',status:'À venir'}
+];
+let currentFilter='Tous';
+const picksEl=document.getElementById('picks');
+function card(p){const vip=p.kind==='VIP';return `<article class="pick ${vip?'vip-locked':''}"><div class="pick-head"><span>${p.league}</span><span class="tag ${vip?'vip':''}">${vip?'♛ VIP':'PUBLIC'}</span></div><div class="match"><div class="team"><span class="crest">${esc(p.homeIcon||'⚽')}</span><b>${esc(p.home)}</b></div><span class="vs">VS</span><div class="team"><span class="crest">${esc(p.awayIcon||'⚽')}</span><b>${esc(p.away)}</b></div></div><div class="details"><div class="detail"><small>PRONOSTIC</small><b>${vip?'🔒 Contenu VIP':esc(p.pick)}</b></div><div class="detail"><small>COTE</small><b>${vip?'🔒':esc(p.odds)}</b></div><div class="detail"><small>CONFIANCE</small><b>${vip?'🔒':esc(p.confidence)}</b></div></div>${vip?`<div class="locked-content"><p class="locked-note">🔒 Pronostic réservé aux membres VIP</p><button class="btn gold" onclick="vipInfo()">Découvrir l’espace VIP ↗</button></div>`:`<div class="analysis"><b>ANALYSE</b>${esc(p.analysis)}</div><div style="padding:0 12px 14px"><a class="btn outline full" href="#telegram">Suivre les publications ↗</a></div>`}</article>`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){const list=samplePicks.filter(p=>currentFilter==='Tous'||p.sport===currentFilter);picksEl.innerHTML=list.map(card).join('')}
+document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentFilter=b.dataset.filter;render()}));
+function vipInfo(){document.getElementById('vip').scrollIntoView({behavior:'smooth'})}window.vipInfo=vipInfo;
+document.getElementById('resultsList').innerHTML=[['Exemple football','À confirmer','—'],['Exemple tennis','À confirmer','—'],['Exemple autres sports','À confirmer','—']].map(r=>`<div class="result-row"><span>${r[0]}</span><span class="status">${r[1]}</span><b>${r[2]}</b></div>`).join('');
+document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('nav').classList.toggle('open'));
+document.querySelectorAll('#nav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
+document.getElementById('adminInfoBtn').addEventListener('click',()=>{const n=document.getElementById('adminNote');n.hidden=!n.hidden});document.getElementById('year').textContent=new Date().getFullYear();
+// Telegram link placeholders intentionally point to the page until the owner's official channel URL is supplied.
+render();
