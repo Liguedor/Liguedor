@@ -93,7 +93,8 @@ async function chargerPronostics() {
     }
 
     window.pronostics = await response.json();
-    afficherListe();
+afficherListe();
+afficherResultats();
   } catch (error) {
     console.error('Erreur de chargement :', error);
     picksEl.innerHTML =
@@ -139,3 +140,26 @@ document.querySelectorAll('.filter').forEach(button => {
 });
 
 chargerPronostics();
+function afficherResultats() {
+  const zone = document.getElementById('resultsList');
+  if (!zone) return;
+
+  const termines = window.pronostics.filter(p => {
+    const resultat = String(p.resultat || '').toLowerCase();
+    return resultat === 'gagne' || resultat === 'perdu';
+  });
+
+  zone.innerHTML = termines.length
+    ? termines.slice(0, 10).map(p => {
+        const resultat = String(p.resultat).toLowerCase();
+        const gagne = resultat === 'gagne';
+
+        return `
+          <div class="result-row">
+            <span>${esc(p.evenement || 'Match')}</span>
+            <span class="status">${gagne ? 'GAGNÉ ✅' : 'PERDU ❌'}</span>
+            <b>${esc(p.cote ?? '—')}</b>
+          </div>`;
+      }).join('')
+    : '<p>Aucun résultat terminé pour le moment.</p>';
+}
