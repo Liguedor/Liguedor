@@ -58,7 +58,7 @@ async function chargerPronostics() {
   picksEl.innerHTML = '<p>Chargement des pronostics…</p>';
 
   try {
-    const url = `${SUPABASE_URL}/rest/v1/pronostics?select=*&categorie=eq.public&publie=eq.true&order=created_at.desc`;
+    const url = `${SUPABASE_URL}/rest/v1/pronostics?select=*&categorie=eq.public&publie=eq.true&order=date.desc`;
 
     const response = await fetch(url, {
       headers: {
