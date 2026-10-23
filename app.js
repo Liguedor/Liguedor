@@ -34,7 +34,7 @@ function afficherPronostic(p) {
       <div class="details">
         <div class="detail">
           <small>PRONOSTIC</small>
-          <b>${vip ? '🔒 Contenu VIP' : esc(p.prediction)}</b>
+          <b>${vip ? '🔒 Contenu VIP' : esc(p.pronostic)}</b>
         </div>
         <div class="detail">
           <small>COTE</small>
