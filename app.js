@@ -68,8 +68,9 @@ async function chargerPronostics() {
     });
 
     if (!response.ok) {
-      throw new Error('Erreur de connexion à Supabase.');
-    }
+  const detail = await response.text();
+  throw new Error(`Supabase ${response.status}: ${detail}`);
+}
 
     window.pronostics = await response.json();
     afficherListe();
