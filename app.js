@@ -76,8 +76,8 @@ async function chargerPronostics() {
     afficherListe();
   } catch (error) {
     console.error(error);
-    picksEl.innerHTML =
-      '<p>Impossible de charger les pronostics. Vérifie la connexion Supabase.</p>';
+   picksEl.innerHTML =
+  '<p>Erreur Supabase : ' + esc(error.message) + '</p>';
   }
 }
 
