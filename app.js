@@ -47,7 +47,7 @@ function afficherPronostic(p) {
       </div>
       ${vip
         ? '<p class="locked-note">🔒 Réservé aux membres VIP</p>'
-        : `<div class="analysis"><b>ANALYSE</b>${esc(p.analyser || '')}</div>`
+        : `<div class="analysis"><b>ANALYSE</b>${esc(p.analyse || '')}</div>`
       }
     </article>`;
 }
