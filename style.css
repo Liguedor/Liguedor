@@ -78,3 +78,36 @@
   background: #2c2110;
   border-color: #8a682b;
 }
+
+/* Logos des équipes sur les cartes de pronostics */
+.team-logo {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin: 0 auto 7px;
+  filter: drop-shadow(0 0 8px #d9a53c22);
+}
+
+.match .team {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.match .team b {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.match .vs {
+  flex: 0 0 auto;
+  padding: 0 4px;
+}
+
+@media (max-width: 650px) {
+  .team-logo {
+    width: 42px;
+    height: 42px;
+  }
+}
