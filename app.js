@@ -58,11 +58,23 @@ function afficherPronostic(p) {
       </div>
       ${statut}
       
+      
       <div class="match">
         <div class="team">
-          <div class="crest">⚽</div>
-          <b>${esc(evenement)}</b>
+          ${logoDomicile
+            ? `<img class="team-logo" src="${esc(logoDomicile)}" alt="${esc(equipeDomicile)}" loading="lazy">`
+            : '<div class="crest">⚽</div>'}
+          <b>${esc(equipeDomicile || evenement)}</b>
         </div>
+        ${equipeExterieur ? `
+          <span class="vs">VS</span>
+          <div class="team">
+            ${logoExterieur
+              ? `<img class="team-logo" src="${esc(logoExterieur)}" alt="${esc(equipeExterieur)}" loading="lazy">`
+              : '<div class="crest">⚽</div>'}
+            <b>${esc(equipeExterieur)}</b>
+          </div>
+        ` : ''}
       </div>
       <div class="details">
         <div class="detail">
