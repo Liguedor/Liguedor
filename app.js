@@ -31,6 +31,10 @@ function afficherPronostic(p) {
 
   const sport = valeur(p, 'sport') || 'Sport';
   const evenement = valeur(p, 'evenement', 'événement') || 'Match à préciser';
+  const equipeDomicile = valeur(p, 'equipe_domicile');
+  const equipeExterieur = valeur(p, 'equipe_exterieur');
+  const logoDomicile = valeur(p, 'logo_domicile');
+  const logoExterieur = valeur(p, 'logo_exterieur');
   const pronostic = valeur(p, 'prediction', 'prédiction', 'pronostic');
   const cote = valeur(p, 'cote');
   const confiance = valeur(p, 'confiance');
