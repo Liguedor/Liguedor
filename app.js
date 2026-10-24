@@ -53,8 +53,10 @@ function afficherPronostic(p) {
         </span>
       </div>
       ${statut}
+      
       <div class="match">
         <div class="team">
+          <div class="crest">⚽</div>
           <b>${esc(evenement)}</b>
         </div>
       </div>
