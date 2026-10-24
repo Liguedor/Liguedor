@@ -36,6 +36,14 @@ function afficherPronostic(p) {
   const confiance = valeur(p, 'confiance');
   const analyse = valeur(p, 'analyser', 'analyse');
 
+  const resultat = String(p.resultat || 'en_attente').toLowerCase();
+
+  const statut = resultat === 'gagne'
+    ? '<span class="pick-status won">GAGNÉ ✅</span>'
+    : resultat === 'perdu'
+      ? '<span class="pick-status lost">PERDU ❌</span>'
+      : '<span class="pick-status pending">EN ATTENTE ⏳</span>';
+
   return `
     <article class="pick ${vip ? 'vip-locked' : ''}">
       <div class="pick-head">
