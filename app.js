@@ -44,6 +44,7 @@ function afficherPronostic(p) {
           ${vip ? '♛ VIP' : 'PUBLIC'}
         </span>
       </div>
+      ${statut}
       <div class="match">
         <div class="team">
           <b>${esc(evenement)}</b>
