@@ -46,3 +46,35 @@
     padding: 24px 8px;
   }
 }
+
+/* Statut du pronostic */
+.pick-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 14px 0;
+  padding: 7px 11px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  border: 1px solid;
+}
+
+.pick-status.won {
+  color: #9de7ba;
+  background: #153624;
+  border-color: #286b43;
+}
+
+.pick-status.lost {
+  color: #ffaaa5;
+  background: #411b19;
+  border-color: #853b36;
+}
+
+.pick-status.pending {
+  color: #ffdc83;
+  background: #2c2110;
+  border-color: #8a682b;
+}
