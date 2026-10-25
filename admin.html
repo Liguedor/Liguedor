@@ -54,9 +54,9 @@
       <form id="pickForm">
         <label>Sport
           <select id="sport" required>
-            <option value="Football">Football</option>
-            <option value="Tennis">Tennis</option>
-            <option value="Autres sports">Autres sports</option>
+            <option value="football">Football</option>
+<option value="tennis">Tennis</option>
+<option value="autres sports">Autres sports</option>
           </select>
         </label>
         <label>Équipe ou joueur à domicile
@@ -154,7 +154,7 @@ document.getElementById('pickForm').addEventListener('submit', async e => {
   const exterieur = document.getElementById('exterieur').value.trim();
 
   const ligne = {
-    sport: document.getElementById('sport').value,
+    sport: document.getElementById('sport').value.toLowerCase().trim(),
     evenement: domicile + ' – ' + exterieur,
     equipe_domicile: domicile,
     equipe_exterieur: exterieur,
