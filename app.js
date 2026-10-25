@@ -190,3 +190,25 @@ function afficherResultats() {
       }).join('')
     : '<p>Aucun résultat terminé pour le moment.</p>';
 }
+// Menu de navigation mobile
+const menuBtn = document.getElementById('menuBtn');
+const nav = document.getElementById('nav');
+
+if (menuBtn && nav) {
+  menuBtn.addEventListener('click', () => {
+    const ouvert = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(ouvert));
+    menuBtn.setAttribute(
+      'aria-label',
+      ouvert ? 'Fermer le menu' : 'Ouvrir le menu'
+    );
+  });
+
+  nav.querySelectorAll('a').forEach(lien => {
+    lien.addEventListener('click', () => {
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      menuBtn.setAttribute('aria-label', 'Ouvrir le menu');
+    });
+  });
+}
