@@ -151,6 +151,32 @@ document.getElementById('pickForm').addEventListener('submit', async e => {
   }
 
   const domicile = document.getElementById('domicile').value.trim();
+    let logoDomicile = null;
+  let logoExterieur = null;
+
+  if (document.getElementById('sport').value === 'football') {
+    message.textContent = 'Recherche des logos des équipes…';
+
+    async function chercherLogo(equipe) {
+      const { data, error } = await db.functions.invoke('football-logos', {
+        body: { team: equipe }
+      });
+
+      if (error || !data?.teams?.length) return null;
+
+      const recherche = equipe.toLowerCase();
+      const equipeTrouvee = data.teams.find(
+        t => t.name.toLowerCase() === recherche
+      ) || data.teams[0];
+
+      return equipeTrouvee.logo || null;
+    }
+
+    [logoDomicile, logoExterieur] = await Promise.all([
+      chercherLogo(domicile),
+      chercherLogo(exterieur)
+    ]);
+  }
   const exterieur = document.getElementById('exterieur').value.trim();
 
   const ligne = {
