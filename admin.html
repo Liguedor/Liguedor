@@ -159,8 +159,13 @@ document.getElementById('pickForm').addEventListener('submit', async e => {
 
     async function chercherLogo(equipe) {
       const { data, error } = await db.functions.invoke('football-logos', {
-        body: { team: equipe }
-      });
+  body: { team: equipe }
+});
+
+if (error) {
+  console.error('Erreur logo :', error);
+  return null;
+}
 
       if (error || !data?.teams?.length) return null;
 
