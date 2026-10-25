@@ -1,1 +1,188 @@
 
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <title>Administration — LIGUE D’OR</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background:#080808; color:#f5f0e5; font-family:Arial,sans-serif; }
+    .admin-wrap { max-width:650px; margin:40px auto; padding:20px; }
+    .admin-box { border:1px solid #b99038; border-radius:14px; padding:24px; background:#12110e; }
+    h1, h2 { color:#e5bd62; }
+    label { display:block; margin-top:16px; font-size:14px; }
+    input, textarea, select {
+      display:block; width:100%; box-sizing:border-box; margin-top:7px;
+      padding:12px; border-radius:7px; border:1px solid #51452c;
+      background:#090909; color:white; font:inherit;
+    }
+    textarea { min-height:100px; }
+    button {
+      margin-top:18px; padding:13px; width:100%; border:0;
+      border-radius:7px; background:#d5a943; color:#111;
+      font-weight:bold; cursor:pointer;
+    }
+    #message { overflow-wrap:anywhere; }
+    .hidden { display:none; }
+    .back { color:#e5bd62; display:inline-block; margin-bottom:20px; }
+  </style>
+</head>
+<body>
+<main class="admin-wrap">
+  <a class="back" href="index.html">← Retour à LIGUE D’OR</a>
+  <div class="admin-box">
+    <h1>♛ LIGUE D’OR</h1>
+    <p>Espace d’administration privé</p>
+
+    <section id="login">
+      <h2>Connexion</h2>
+      <form id="loginForm">
+        <label>E-mail
+          <input id="email" type="email" autocomplete="username" required>
+        </label>
+        <label>Mot de passe
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit">Se connecter</button>
+      </form>
+    </section>
+
+    <section id="publication" class="hidden">
+      <h2>Publier un pronostic</h2>
+      <form id="pickForm">
+        <label>Sport
+          <select id="sport" required>
+            <option value="Football">Football</option>
+            <option value="Tennis">Tennis</option>
+            <option value="Autres sports">Autres sports</option>
+          </select>
+        </label>
+        <label>Équipe ou joueur à domicile
+          <input id="domicile" required>
+        </label>
+        <label>Équipe ou joueur adverse
+          <input id="exterieur" required>
+        </label>
+        <label>Pronostic
+          <input id="pronostic" required>
+        </label>
+        <label>Cote
+          <input id="cote" type="number" min="1.01" step="0.01" required>
+        </label>
+        <label>Confiance (%)
+          <input id="confiance" type="number" min="1" max="100" required>
+        </label>
+        <label>Catégorie
+          <select id="categorie">
+            <option value="public">Public</option>
+            <option value="vip">VIP</option>
+          </select>
+        </label>
+        <label>Analyse
+          <textarea id="analyse" required></textarea>
+        </label>
+        <button type="submit">Publier le pronostic</button>
+        <button type="button" id="logout" style="background:#333;color:white">
+          Se déconnecter
+        </button>
+      </form>
+    </section>
+    <p id="message" role="status"></p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://qvnmhvbuwbwtlemmqwxu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const login = document.getElementById('login');
+const publication = document.getElementById('publication');
+const message = document.getElementById('message');
+
+function afficherSession(session) {
+  const connecte = Boolean(session);
+  login.classList.toggle('hidden', connecte);
+  publication.classList.toggle('hidden', !connecte);
+}
+
+async function verifierSession() {
+  const { data, error } = await db.auth.getSession();
+  if (error) message.textContent = error.message;
+  afficherSession(data?.session);
+}
+
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  message.textContent = 'Connexion en cours…';
+
+  const { data, error } = await db.auth.signInWithPassword({
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value
+  });
+
+  if (error) {
+    message.textContent = 'Connexion impossible : ' + error.message;
+    return;
+  }
+
+  afficherSession(data.session);
+  message.textContent = 'Connecté. Vérification des autorisations nécessaire.';
+});
+
+document.getElementById('logout').addEventListener('click', async () => {
+  await db.auth.signOut();
+  afficherSession(null);
+  message.textContent = 'Déconnexion effectuée.';
+});
+
+document.getElementById('pickForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  message.textContent = 'Publication en cours…';
+
+  const { data: sessionData } = await db.auth.getSession();
+  if (!sessionData.session) {
+    afficherSession(null);
+    message.textContent = 'Reconnecte-toi pour continuer.';
+    return;
+  }
+
+  const domicile = document.getElementById('domicile').value.trim();
+  const exterieur = document.getElementById('exterieur').value.trim();
+
+  const ligne = {
+    sport: document.getElementById('sport').value,
+    evenement: domicile + ' – ' + exterieur,
+    equipe_domicile: domicile,
+    equipe_exterieur: exterieur,
+    pronostic: document.getElementById('pronostic').value.trim(),
+    cote: Number(document.getElementById('cote').value),
+    confiance: Number(document.getElementById('confiance').value),
+    categorie: document.getElementById('categorie').value,
+    analyse: document.getElementById('analyse').value.trim(),
+    resultat: 'en_attente',
+    publie: true
+  };
+
+  const { error } = await db.from('pronostics').insert(ligne);
+
+  if (error) {
+    message.textContent =
+      'Publication refusée ou impossible : ' + error.message +
+      ' — Les autorisations de sécurité doivent être configurées.';
+    return;
+  }
+
+  message.textContent = 'Pronostic publié !';
+  e.target.reset();
+});
+
+db.auth.onAuthStateChange((_event, session) => afficherSession(session));
+verifierSession();
+</script>
+</body>
+</html>
+
