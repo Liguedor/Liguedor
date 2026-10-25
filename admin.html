@@ -150,31 +150,39 @@ document.getElementById('pickForm').addEventListener('submit', async e => {
     return;
   }
 
-  const domicile = document.getElementById('domicile').value.trim();
-    let logoDomicile = null;
+   const domicile = document.getElementById('domicile').value.trim();
+  const exterieur = document.getElementById('exterieur').value.trim();
+
+  let logoDomicile = null;
   let logoExterieur = null;
 
   if (document.getElementById('sport').value === 'football') {
     message.textContent = 'Recherche des logos des équipes…';
 
     async function chercherLogo(equipe) {
-      const { data, error } = await db.functions.invoke('football-logos', {
-  body: { team: equipe }
-});
+      try {
+        const controleur = new AbortController();
+        const delai = setTimeout(() => controleur.abort(), 8000);
 
-if (error) {
-  console.error('Erreur logo :', error);
-  return null;
-}
+        const { data, error } = await db.functions.invoke('football-logos', {
+          body: { team: equipe },
+          signal: controleur.signal
+        });
 
-      if (error || !data?.teams?.length) return null;
+        clearTimeout(delai);
 
-      const recherche = equipe.toLowerCase();
-      const equipeTrouvee = data.teams.find(
-        t => t.name.toLowerCase() === recherche
-      ) || data.teams[0];
+        if (error || !data?.teams?.length) return null;
 
-      return equipeTrouvee.logo || null;
+        const nom = equipe.toLowerCase().trim();
+        const trouve = data.teams.find(
+          t => t.name.toLowerCase().trim() === nom
+        ) || data.teams[0];
+
+        return trouve.logo || null;
+      } catch (err) {
+        console.error('Erreur de recherche du logo :', err);
+        return null;
+      }
     }
 
     [logoDomicile, logoExterieur] = await Promise.all([
@@ -182,7 +190,6 @@ if (error) {
       chercherLogo(exterieur)
     ]);
   }
-  const exterieur = document.getElementById('exterieur').value.trim();
 
   const ligne = {
     sport: document.getElementById('sport').value.toLowerCase().trim(),
