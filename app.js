@@ -39,14 +39,31 @@ function logoEquipe(nom) {
 
 
   const nomNettoye = String(nom).trim();
-  const variantes = [
-    `${nomNettoye}.png`,
-    `${nomNettoye.replace(/^FC\s+/i, '')}.png`,
-    `${nomNettoye.replace(/^AS\s+/i, '')}.png`
-  ];
+const variantes = [
+  `${nomNettoye}.png`,
+  `${nomNettoye.replace(/^FC\s+/i, '')}.png`,
+  `${nomNettoye.replace(/^AS\s+/i, '')}.png`
+];
 
-  const tester = (index) => {
-    if (index >= variantes.length) return;
+const tester = (index) => {
+  if (index >= variantes.length) return;
+
+  const url = DOSSIER_LOGOS + variantes[index]
+    .split('/')
+    .map(part => encodeURIComponent(part))
+    .join('/');
+
+  const img = new Image();
+
+  img.onload = () => {};
+  img.onerror = () => tester(index + 1);
+  img.src = url;
+
+  return url;
+};
+
+return tester(0) || '';
+}
 
     const url = DOSSIER_LOGOS + variantes[index]
       .split('/')
