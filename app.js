@@ -122,24 +122,6 @@ function logoEquipe(nom) {
   return fichier ? fichier.chemin : '';
 }
 
-function logoEquipe(nom) {
-  if (!nom) return '';
-
-  const recherche = normaliserNom(nom);
-
-  const alias = correspondancesLogos[
-    String(nom).trim().toLowerCase()
-  ];
-
-  const fichier = alias || fichiersLogos.find(f =>
-    normaliserNom(f.replace(/\.png$/i, '')) === recherche
-  );
-
-  return fichier
-    ? DOSSIER_LOGOS + encodeURIComponent(fichier)
-    : '';
-}
-
 function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;',
