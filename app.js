@@ -122,20 +122,6 @@ function logoEquipe(nom) {
   return fichier ? fichier.chemin : '';
 }
 
-  const alias = correspondancesLogos[nomBrut];
-
-  const fichier = fichiersLogos.find(f =>
-    f.chemin.startsWith('./logos/') &&
-    !f.chemin.startsWith('./logos/nba/') &&
-    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) ===
-      normaliserNom(alias || nom)
-  );
-
-  return fichier ? fichier.chemin : '';
-}
-
-}
-
 function logoEquipe(nom) {
   if (!nom) return '';
 
