@@ -127,8 +127,8 @@ function afficherPronostic(p) {
   const evenement = valeur(p, 'evenement', 'événement') || 'Match à préciser';
   const equipeDomicile = valeur(p, 'equipe_domicile');
   const equipeExterieur = valeur(p, 'equipe_exterieur');
-  const logoDomicile = valeur(p, 'logo_domicile') || logoEquipe(valeur(p, 'equipe_domicile'));
-const logoExterieur = valeur(p, 'logo_exterieur') || logoEquipe(valeur(p, 'equipe_exterieur'));
+  const logoDomicile = logoEquipe(valeur(p, 'equipe_domicile')) || valeur(p, 'logo_domicile');
+const logoExterieur = logoEquipe(valeur(p, 'equipe_exterieur')) || valeur(p, 'logo_exterieur');
   const pronostic = valeur(p, 'prediction', 'prédiction', 'pronostic');
   const cote = valeur(p, 'cote');
   const confiance = valeur(p, 'confiance');
