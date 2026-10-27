@@ -9,7 +9,70 @@ window.pronostics = [];
 const DOSSIER_LOGOS = './logos/';
 
 
+
+const correspondancesLogos = {
+  'arsenal': 'Arsenal FC.png',
+  'liverpool': 'Liverpool FC.png',
+  'lyon': 'Olympique Lyon.png',
+  'olympique lyonnais': 'Olympique Lyon.png',
+  'hoffenheim': 'TSG 1899 Hoffenheim.png',
+  'psg': 'Paris Saint-Germain.png',
+  'paris sg': 'Paris Saint-Germain.png',
+  'inter': 'Inter Milan.png',
+  'bayern': 'Bayern Munich.png',
+  'barcelone': 'FC Barcelona.png',
+  'barcelona': 'FC Barcelona.png',
+  'man city': 'Manchester City.png',
+  'man united': 'Manchester United.png'
+};
+
+let fichiersLogos = [];
+
+function normaliserNom(nom) {
+  return String(nom || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+}
+
+async function chargerLogos() {
+  try {
+    const response = await fetch(
+      'https://api.github.com/repos/Liguedor/Liguedor/contents/logos'
+    );
+
+    if (!response.ok) throw new Error('Logos indisponibles');
+
+    const fichiers = await response.json();
+
+    fichiersLogos = fichiers
+      .filter(f => f.type === 'file' && /\.png$/i.test(f.name))
+      .map(f => f.name);
+
+  } catch (erreur) {
+    console.warn('Chargement des logos :', erreur);
+  }
+}
+
 function logoEquipe(nom) {
+  if (!nom) return '';
+
+  const recherche = normaliserNom(nom);
+
+  const alias = correspondancesLogos[
+    String(nom).trim().toLowerCase()
+  ];
+
+  const fichier = alias || fichiersLogos.find(f =>
+    normaliserNom(f.replace(/\.png$/i, '')) === recherche
+  );
+
+  return fichier
+    ? DOSSIER_LOGOS + encodeURIComponent(fichier)
+    : '';
+}
+
   if (!nom) return '';
 
   const n = String(nom).trim().toLowerCase();
@@ -197,7 +260,7 @@ document.querySelectorAll('.filter').forEach(button => {
   });
 });
 
-chargerPronostics();
+chargerLogos().then(() => chargerPronostics());
 function afficherResultats() {
   const zone = document.getElementById('resultsList');
   if (!zone) return;
