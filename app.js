@@ -130,7 +130,7 @@ const logoExterieur = logoEquipe(valeur(p, 'equipe_exterieur')) || valeur(p, 'lo
         <div class="team">
           ${logoDomicile
             ? `<img class="team-logo" src="${esc(logoDomicile)}" alt="${esc(equipeDomicile)}" loading="lazy">`
-            : '<div class="crest">⚽</div>'}
+            : `<div class="crest">${iconeSport(sport)}</div>`}
           <b>${esc(equipeDomicile || evenement)}</b>
         </div>
         ${equipeExterieur ? `
@@ -138,7 +138,7 @@ const logoExterieur = logoEquipe(valeur(p, 'equipe_exterieur')) || valeur(p, 'lo
           <div class="team">
             ${logoExterieur
               ? `<img class="team-logo" src="${esc(logoExterieur)}" alt="${esc(equipeExterieur)}" loading="lazy">`
-              : '<div class="crest">⚽</div>'}
+              : `<div class="crest">${iconeSport(sport)}</div>`}
             <b>${esc(equipeExterieur)}</b>
           </div>
         ` : ''}
