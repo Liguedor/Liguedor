@@ -207,7 +207,9 @@ function normaliserSport(sport) {
 
   return s;
 }
-
+function iconeSport(sport) {
+  return normaliserSport(sport) === 'tennis' ? '🎾' : '⚽';
+}
 function afficherListe() {
   if (!picksEl) return;
 
