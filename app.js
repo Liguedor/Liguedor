@@ -6,9 +6,8 @@ const picksEl = document.getElementById('picks');
 let currentFilter = 'Tous';
 window.pronostics = [];
 
+
 const DOSSIER_LOGOS = './logos/';
-
-
 
 const correspondancesLogos = {
   'arsenal': 'Arsenal FC.png',
@@ -26,6 +25,40 @@ const correspondancesLogos = {
   'man united': 'Manchester United.png'
 };
 
+const logosNBA = {
+  'atlanta hawks': 'atlanta.png',
+  'boston celtics': 'boston-celtics.png',
+  'brooklyn nets': 'brooklyn-nets.png',
+  'charlotte hornets': 'charlotte-hornets.png',
+  'chicago bulls': 'chicago-bulls.png',
+  'cleveland cavaliers': 'cleveland-cavaliers.svg',
+  'dallas mavericks': 'dallas-mavericks.png',
+  'denver nuggets': 'denver-nuggets.png',
+  'detroit pistons': 'detroit-pistons.svg',
+  'golden state warriors': 'golden-state-warriors.png',
+  'houston rockets': 'houston-rockets.png',
+  'indiana pacers': 'indiana-pacers.png',
+  'la clippers': 'la-clippers.png',
+  'los angeles clippers': 'la-clippers.png',
+  'los angeles lakers': 'los-angeles-lakers.png',
+  'memphis grizzlies': 'memphis-grizzlies.png',
+  'miami heat': 'miami-heat.png',
+  'milwaukee bucks': 'milwaukee-bucks.png',
+  'minnesota timberwolves': 'minnesota-timberwolves.png',
+  'new orleans pelicans': 'new-orleans-pelicans.png',
+  'new york knicks': 'new-york-knicks.png',
+  'oklahoma city thunder': 'oklahoma-city-thunder.png',
+  'orlando magic': 'orlando-magic.png',
+  'philadelphia 76ers': 'philadelphia-76ers.png',
+  'phoenix suns': 'phoenix-suns.png',
+  'portland trail blazers': 'portland-trail-blazers.png',
+  'sacramento kings': 'sacramento-kings.png',
+  'san antonio spurs': 'san-antonio-spurs.png',
+  'toronto raptors': 'toronto-raptors.png',
+  'utah jazz': 'utah-jazz.png',
+  'washington wizards': 'washington-wizards.png'
+};
+
 let fichiersLogos = [];
 
 function normaliserNom(nom) {
@@ -38,21 +71,57 @@ function normaliserNom(nom) {
 
 async function chargerLogos() {
   try {
-    const response = await fetch(
-      'https://api.github.com/repos/Liguedor/Liguedor/contents/logos'
-    );
+    const [footballResponse, nbaResponse] = await Promise.all([
+      fetch('https://api.github.com/repos/Liguedor/Liguedor/contents/logos'),
+      fetch('https://api.github.com/repos/Liguedor/Liguedor/contents/logos/nba')
+    ]);
 
-    if (!response.ok) throw new Error('Logos indisponibles');
+    const football = footballResponse.ok
+      ? await footballResponse.json()
+      : [];
 
-    const fichiers = await response.json();
+    const nba = nbaResponse.ok
+      ? await nbaResponse.json()
+      : [];
 
-    fichiersLogos = fichiers
-      .filter(f => f.type === 'file' && /\.png$/i.test(f.name))
-      .map(f => f.name);
-
+    fichiersLogos = [
+      ...football
+        .filter(f => f.type === 'file' && /\.(png|svg)$/i.test(f.name))
+        .map(f => ({ nom: f.name, chemin: './logos/' + f.name })),
+      ...nba
+        .filter(f => f.type === 'file' && /\.(png|svg)$/i.test(f.name))
+        .map(f => ({ nom: f.name, chemin: './logos/nba/' + f.name }))
+    ];
   } catch (erreur) {
     console.warn('Chargement des logos :', erreur);
   }
+}
+
+function logoEquipe(nom) {
+  if (!nom) return '';
+
+  const nomBrut = String(nom).trim().toLowerCase();
+  const nomNBA = logosNBA[nomBrut];
+
+  if (nomNBA) {
+    const fichierNBA = fichiersLogos.find(f =>
+      f.chemin === './logos/nba/' + nomNBA
+    );
+    if (fichierNBA) return fichierNBA.chemin;
+  }
+
+  const alias = correspondancesLogos[nomBrut];
+
+  const fichier = fichiersLogos.find(f =>
+    f.chemin.startsWith('./logos/') &&
+    !f.chemin.startsWith('./logos/nba/') &&
+    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) ===
+      normaliserNom(alias || nom)
+  );
+
+  return fichier ? fichier.chemin : '';
+}
+
 }
 
 function logoEquipe(nom) {
