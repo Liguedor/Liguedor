@@ -331,14 +331,35 @@ afficherResultats();
   }
 }
 
+
 function normaliserSport(sport) {
-  const s = String(sport ?? '').toLowerCase().trim();
+  const s = String(sport ?? '')
+    .toLowerCase()
+    .trim();
 
   if (s === 'all' || s === 'tous') return 'tous';
-  if (s.includes('football')) return 'football';
+  if (s.includes('football') || s === 'foot') return 'football';
   if (s.includes('tennis')) return 'tennis';
-  if (s.includes('basket') || s.includes('nba')) return 'basket';
-  if (s.includes('autre')) return 'autres sports';
+
+  const multisports = [
+    'basket', 'nba',
+    'volleyball', 'volley',
+    'hockey',
+    'badminton',
+    'rugby',
+    'baseball',
+    'ping-pong', 'ping pong', 'tennis de table',
+    'mma',
+    'boxe', 'boxing'
+  ];
+
+  if (multisports.some(sportNom => s.includes(sportNom))) {
+    return 'multisports';
+  }
+
+  if (s.includes('multisport') || s.includes('autre')) {
+    return 'multisports';
+  }
 
   return s;
 }
