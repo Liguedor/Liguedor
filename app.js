@@ -73,33 +73,6 @@ function logoEquipe(nom) {
     : '';
 }
 
-  if (!nom) return '';
-
-  const n = String(nom).trim().toLowerCase();
-
-  const correspondances = {
-    'arsenal': 'Arsenal FC.png',
-    'liverpool': 'Liverpool FC.png',
-    'manchester city': 'Manchester City FC.png',
-    'manchester united': 'Manchester United FC.png',
-    'chelsea': 'Chelsea FC.png',
-    'tottenham': 'Tottenham Hotspur.png',
-    'real madrid': 'Real Madrid.png',
-    'barcelone': 'FC Barcelona.png',
-    'barcelona': 'FC Barcelona.png',
-    'bayern munich': 'FC Bayern München.png',
-    'psg': 'Paris Saint-Germain.png',
-    'paris saint-germain': 'Paris Saint-Germain.png',
-    'inter': 'Inter Milan.png',
-    'ac milan': 'AC Milan.png'
-  };
-
-  const fichier = correspondances[n] || `${String(nom).trim()}.png`;
-
-  return DOSSIER_LOGOS +
-    fichier.split('/').map(encodeURIComponent).join('/');
-}
-
 function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;',
