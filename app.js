@@ -104,11 +104,23 @@ function logoEquipe(nom) {
   const nomNBA = logosNBA[nomBrut];
 
   if (nomNBA) {
-    const fichierNBA = fichiersLogos.find(f =>
-      f.chemin === './logos/nba/' + nomNBA
+    const logoNBA = fichiersLogos.find(f =>
+      f.chemin.toLowerCase() ===
+      ('./logos/nba/' + nomNBA).toLowerCase()
     );
-    if (fichierNBA) return fichierNBA.chemin;
+    if (logoNBA) return logoNBA.chemin;
   }
+
+  const alias = correspondancesLogos[nomBrut];
+  const recherche = normaliserNom(alias || nom);
+
+  const fichier = fichiersLogos.find(f =>
+    !f.chemin.startsWith('./logos/nba/') &&
+    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) === recherche
+  );
+
+  return fichier ? fichier.chemin : '';
+}
 
   const alias = correspondancesLogos[nomBrut];
 
@@ -272,13 +284,19 @@ function normaliserSport(sport) {
   if (s === 'all' || s === 'tous') return 'tous';
   if (s.includes('football')) return 'football';
   if (s.includes('tennis')) return 'tennis';
+  if (s.includes('basket') || s.includes('nba')) return 'basket';
   if (s.includes('autre')) return 'autres sports';
 
   return s;
 }
 
 function iconeSport(sport) {
-  return normaliserSport(sport) === 'tennis' ? '🎾' : '⚽';
+  const s = normaliserSport(sport);
+
+  if (s === 'tennis') return '🎾';
+  if (s === 'basket') return '🏀';
+
+  return '⚽';
 }
 
 const portraitsJoueurs = {};
