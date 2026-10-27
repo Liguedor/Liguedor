@@ -40,7 +40,7 @@ const logosNBA = {
   'indiana pacers': 'indiana-pacers.png',
   'la clippers': 'la-clippers.png',
   'los angeles clippers': 'la-clippers.png',
-  'los angeles lakers': 'los-angeles-lakers.svg',
+  'lakers': 'los-angeles-lakers.svg',
   'memphis grizzlies': 'memphis-grizzlies.png',
   'miami heat': 'miami-heat.png',
   'milwaukee bucks': 'milwaukee-bucks.png',
