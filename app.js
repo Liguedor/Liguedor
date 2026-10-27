@@ -101,25 +101,32 @@ function logoEquipe(nom) {
   if (!nom) return '';
 
   const nomBrut = String(nom).trim().toLowerCase();
+
+  // Recherche du logo NBA dans les fichiers réellement chargés
   const nomNBA = logosNBA[nomBrut];
 
   if (nomNBA) {
-    const logoNBA = fichiersLogos.find(f =>
+    const logo = fichiersLogos.find(f =>
       f.chemin.toLowerCase() ===
       ('./logos/nba/' + nomNBA).toLowerCase()
     );
-    if (logoNBA) return logoNBA.chemin;
+
+    if (logo) return logo.chemin;
   }
 
+  // Recherche du logo de football
   const alias = correspondancesLogos[nomBrut];
-  const recherche = normaliserNom(alias || nom);
-
-  const fichier = fichiersLogos.find(f =>
-    !f.chemin.startsWith('./logos/nba/') &&
-    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) === recherche
+  const nomRecherche = normaliserNom(
+    (alias || nom).replace(/\.(png|svg)$/i, '')
   );
 
-  return fichier ? fichier.chemin : '';
+  const logo = fichiersLogos.find(f =>
+    f.chemin.startsWith('./logos/') &&
+    !f.chemin.startsWith('./logos/nba/') &&
+    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) === nomRecherche
+  );
+
+  return logo ? logo.chemin : '';
 }
 
 function esc(value) {
