@@ -207,9 +207,43 @@ function normaliserSport(sport) {
 
   return s;
 }
+
 function iconeSport(sport) {
   return normaliserSport(sport) === 'tennis' ? '🎾' : '⚽';
 }
+
+const portraitsJoueurs = {};
+
+async function rechercherPortrait(joueur) {
+  if (!joueur) return '';
+
+  if (portraitsJoueurs[joueur]) {
+    return portraitsJoueurs[joueur];
+  }
+
+  try {
+    const url =
+      'https://commons.wikimedia.org/w/api.php' +
+      '?action=query&generator=search' +
+      '&gsrsearch=' + encodeURIComponent('filetype:bitmap ' + joueur + ' tennis player') +
+      '&gsrnamespace=6&gsrlimit=5&prop=imageinfo' +
+      '&iiprop=url&iiurlwidth=160&format=json&origin=*';
+
+    const response = await fetch(url);
+    if (!response.ok) return '';
+
+    const data = await response.json();
+    const pages = Object.values(data.query?.pages || {});
+    const image = pages[0];
+    const portrait = image?.imageinfo?.[0]?.thumburl || '';
+
+    portraitsJoueurs[joueur] = portrait;
+    return portrait;
+  } catch {
+    return '';
+  }
+}
+
 function afficherListe() {
   if (!picksEl) return;
 
