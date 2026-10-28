@@ -111,3 +111,28 @@
     height: 42px;
   }
 }
+
+/* LIGUE D’OR — image premium de l’accueil */
+.hero {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.88) 0%,
+      rgba(0, 0, 0, 0.60) 48%,
+      rgba(0, 0, 0, 0.18) 100%
+    ),
+    url("./images/accueil-principal.png") center / cover no-repeat;
+}
+
+@media (max-width: 650px) {
+  .hero {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.70) 0%,
+        rgba(0, 0, 0, 0.38) 55%,
+        rgba(0, 0, 0, 0.78) 100%
+      ),
+      url("./images/accueil-principal.png") center / cover no-repeat;
+  }
+}
