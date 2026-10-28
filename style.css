@@ -133,6 +133,6 @@
         rgba(0, 0, 0, 0.38) 55%,
         rgba(0, 0, 0, 0.78) 100%
       ),
-      url("./images/accueil-principal.png") center / cover no-repeat;
+      url("./accueil-principal.png") center / cover no-repeat;
   }
 }
