@@ -121,7 +121,7 @@
       rgba(0, 0, 0, 0.60) 48%,
       rgba(0, 0, 0, 0.18) 100%
     ),
-    url("./images/accueil-principal.png") center / cover no-repeat;
+    url("./accueil-principal.png") center / cover no-repeat;
 }
 
 @media (max-width: 650px) {
