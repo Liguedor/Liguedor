@@ -709,3 +709,38 @@ body {
     z-index: 101;
   }
 }
+
+/* LIGUE D’OR — ouverture fluide du menu latéral */
+@media (max-width: 650px) {
+  .topbar nav.side-menu,
+  .topbar nav.side-menu.open {
+    position: fixed !important;
+    top: 12px !important;
+    right: 10px !important;
+    left: auto !important;
+    bottom: auto !important;
+
+    width: min(76vw, 280px) !important;
+    height: auto !important;
+    max-height: calc(100dvh - 24px) !important;
+    overflow-y: auto !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    transform: translateY(-15px) translateX(calc(100% + 24px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: transform .25s ease, opacity .25s ease,
+      visibility .25s ease !important;
+  }
+
+  .topbar nav.side-menu.open {
+    transform: translateY(0) translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
