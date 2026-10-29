@@ -468,3 +468,16 @@ body {
     display: none;
   }
 }
+
+/* Correction du bouton menu */
+.topbar .menu::before {
+  content: none !important;
+}
+
+.topbar .menu {
+  font-size: 0 !important;
+}
+
+.topbar .menu {
+  font-size: 22px !important;
+}
