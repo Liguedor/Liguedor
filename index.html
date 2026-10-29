@@ -11,18 +11,26 @@
   <a class="brand" href="#accueil" aria-label="LIGUE D’OR">
     <img src="./images/banniere-liguedor.jpg" alt="LIGUE D’OR">
   </a>
-  <button class="menu" id="menuBtn" aria-label="Ouvrir le menu">☰</button>
-  <nav id="nav">
-    <a href="#accueil">Accueil</a>
-    <a href="#pronostics">Pronostics</a>
-    <a href="#sports">Sports</a>
-    <a href="#resultats">Résultats</a>
-    <a href="#videos">Vidéos</a>
-    <a href="#vip">VIP</a>
-    <a href="#actualites">Actualités</a>
-  </nav>
+  <button class="menu" id="menuBtn" aria-label="Ouvrir le menu" aria-expanded="false">♛</button>
+  
+<nav id="nav" class="side-menu" aria-label="Menu principal">
+  <div class="side-menu-head">
+    <span class="side-menu-crown">♛</span>
+    <b>LIGUE D’OR</b>
+    <button class="side-menu-close" id="closeMenu" aria-label="Fermer le menu">×</button>
+  </div>
+
+  <a href="#accueil"><span>⌂</span> Accueil <i>›</i></a>
+  <a href="#pronostics"><span>♜</span> Pronostics <i>›</i></a>
+  <a href="#sports"><span>⚽</span> Sports <i>›</i></a>
+  <a href="#resultats"><span>▥</span> Résultats <i>›</i></a>
+  <a href="#vip"><span>♛</span> VIP <i>›</i></a>
+  <a href="#videos"><span>▷</span> Vidéos <i>›</i></a>
+  <a href="#actualites"><span>▤</span> Actualités <i>›</i></a>
+</nav>
   <a class="btn gold navcta" id="telegramTop" href="#telegram">↗ Rejoindre Telegram</a>
 </header>
+  <div class="menu-overlay" id="menuOverlay"></div>
 <main>
 <section class="hero" id="accueil"><div class="hero-copy">
 <p class="eyebrow">L’EXIGENCE DU SPORT</p>
