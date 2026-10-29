@@ -454,25 +454,39 @@ function afficherResultats() {
       }).join('')
     : '<p>Aucun résultat terminé pour le moment.</p>';
 }
-// Menu de navigation mobile
+
+/* Menu latéral premium LIGUE D'OR */
 const menuBtn = document.getElementById('menuBtn');
 const nav = document.getElementById('nav');
+const closeMenu = document.getElementById('closeMenu');
+const menuOverlay = document.getElementById('menuOverlay');
 
-if (menuBtn && nav) {
+function ouvrirMenu(ouvrir) {
+  if (!nav || !menuBtn || !menuOverlay) return;
+
+  nav.classList.toggle('open', ouvrir);
+  menuOverlay.classList.toggle('open', ouvrir);
+  menuBtn.setAttribute('aria-expanded', String(ouvrir));
+  menuBtn.setAttribute(
+    'aria-label',
+    ouvrir ? 'Fermer le menu' : 'Ouvrir le menu'
+  );
+  document.body.style.overflow = ouvrir ? 'hidden' : '';
+}
+
+if (menuBtn && nav && menuOverlay) {
   menuBtn.addEventListener('click', () => {
-    const ouvert = nav.classList.toggle('open');
-    menuBtn.setAttribute('aria-expanded', String(ouvert));
-    menuBtn.setAttribute(
-      'aria-label',
-      ouvert ? 'Fermer le menu' : 'Ouvrir le menu'
-    );
+    ouvrirMenu(!nav.classList.contains('open'));
   });
 
+  closeMenu?.addEventListener('click', () => ouvrirMenu(false));
+  menuOverlay.addEventListener('click', () => ouvrirMenu(false));
+
   nav.querySelectorAll('a').forEach(lien => {
-    lien.addEventListener('click', () => {
-      nav.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      menuBtn.setAttribute('aria-label', 'Ouvrir le menu');
-    });
+    lien.addEventListener('click', () => ouvrirMenu(false));
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') ouvrirMenu(false);
   });
 }
