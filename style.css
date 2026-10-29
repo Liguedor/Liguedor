@@ -482,163 +482,76 @@ body {
   font-size: 22px !important;
 }
 
-/* LIGUE D'OR — menu latéral premium */
+
+/* LIGUE D'OR — menu latéral premium : version propre */
 .menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 90;
-  background: rgba(0, 0, 0, .72);
+  background: rgba(0, 0, 0, 0.72);
   opacity: 0;
   visibility: hidden;
-  transition: opacity .25s ease, visibility .25s ease;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .menu-overlay.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 @media (max-width: 650px) {
+  /* Bouton couronne */
   .topbar .menu {
-    z-index: 101;
-    cursor: pointer;
-    color: #ffdc83;
-    background: #080808;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    z-index: 102;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     border: 1px solid #c49a43;
     border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    font-size: 25px;
-    box-shadow: 0 0 18px #d99b2730;
-  }
-
-  .topbar nav.side-menu,
-  .topbar nav.side-menu.open {
-    position: fixed;
-    z-index: 100;
-    top: 12px;
-    right: 12px;
-    bottom: auto;
-    width: min(82vw, 340px);
-    max-height: calc(100dvh - 24px);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 0;
-    padding: 14px;
-    background: linear-gradient(145deg, #11100d, #050505 75%);
-    border: 1px solid #8b692d;
-    border-radius: 16px;
-    box-shadow: 0 15px 50px #000c, inset 0 0 25px #d99b2708;
-    transform: translateX(calc(100% + 20px));
-    visibility: hidden;
-    transition: transform .28s ease, visibility .28s ease;
-  }
-
-  .topbar nav.side-menu.open {
-    transform: translateX(0);
-    visibility: visible;
-  }
-
-  .side-menu-head {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 12px 35px 20px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #5c4824;
-  }
-
-  .side-menu-crown {
+    background: #080808;
     color: #ffdc83;
-    font-size: 43px;
-    line-height: 1.1;
-    text-shadow: 0 0 18px #d99b2770;
-  }
-
-  .side-menu-head b {
-    color: #ffdc83;
-    font-family: Georgia, serif;
-    font-size: 21px;
-    letter-spacing: .07em;
-    text-align: center;
-  }
-
-  .side-menu-close {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 35px;
-    height: 35px;
-    color: #ffdc83;
-    background: transparent;
-    border: 0;
-    font-size: 30px;
+    font-size: 23px;
     cursor: pointer;
   }
 
-  .topbar nav.side-menu a {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    width: 100%;
-    min-height: 55px;
-    padding: 12px 8px;
-    color: #f6f3eb;
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid #292116;
-    border-radius: 0;
-    text-align: left;
-    font-size: 14px;
-  }
-
-  .topbar nav.side-menu a span {
-    width: 28px;
-    color: #e8b94f;
-    font-size: 22px;
-    text-align: center;
-  }
-
-  .topbar nav.side-menu a i {
-    margin-left: auto;
-    color: #b8954b;
-    font-size: 24px;
-    font-style: normal;
-  }
-
-  .topbar nav.side-menu a:active {
-    background: #d9a53c18;
-  }
-}
-
-/* LIGUE D'OR — correction du menu mobile */
-@media (max-width: 650px) {
-  .topbar nav.side-menu {
-    display: flex !important;
+  /* Panneau fermé par défaut */
+  .topbar nav.side-menu,
+  .topbar nav.side-menu.open {
     position: fixed;
     top: 12px;
     right: 10px;
     bottom: auto;
-    width: min(76vw, 290px);
+    z-index: 101;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: min(76vw, 280px);
     max-height: calc(100dvh - 24px);
     overflow-y: auto;
+    margin: 0;
     padding: 10px 12px;
-    gap: 0;
-    background: #090909;
     border: 1px solid #8b692d;
     border-radius: 14px;
-    box-shadow: 0 12px 35px #000c;
-    transform: translateX(calc(100% + 30px));
+    background: linear-gradient(145deg, #11100d, #050505 75%);
+    box-shadow: 0 15px 40px #000c;
+    transform: translateX(calc(100% + 20px));
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
-    transition: transform .25s ease, opacity .25s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease,
+      visibility 0.25s ease;
   }
 
+  /* Panneau ouvert */
   .topbar nav.side-menu.open {
     transform: translateX(0);
     visibility: visible;
@@ -646,49 +559,80 @@ body {
     pointer-events: auto;
   }
 
+  /* En-tête : couronne et uniquement LIGUE D'OR */
   .side-menu-head {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
     padding: 8px 30px 12px;
     margin-bottom: 4px;
-    gap: 2px;
+    border-bottom: 1px solid #5c4824;
   }
 
   .side-menu-crown {
+    color: #ffdc83;
     font-size: 30px;
+    line-height: 1.1;
+    text-shadow: 0 0 15px #d99b2760;
   }
 
   .side-menu-head b {
+    color: #ffdc83;
+    font-family: Georgia, serif;
     font-size: 17px;
-    letter-spacing: .05em;
+    letter-spacing: 0.05em;
+    text-align: center;
   }
 
   .side-menu-close {
+    position: absolute;
     top: 0;
     right: 0;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #ffdc83;
     font-size: 26px;
+    cursor: pointer;
   }
 
+  /* Rubriques compactes */
   .topbar nav.side-menu a {
-    min-height: 45px;
-    padding: 9px 6px;
-    font-size: 13px;
+    display: flex;
+    align-items: center;
     gap: 10px;
+    width: 100%;
+    min-height: 43px;
+    padding: 8px 5px;
+    border: 0;
+    border-bottom: 1px solid #292116;
+    border-radius: 0;
+    background: transparent;
+    color: #f6f3eb;
+    font-size: 13px;
+    text-align: left;
   }
 
   .topbar nav.side-menu a span {
     width: 24px;
+    flex-shrink: 0;
+    color: #e8b94f;
     font-size: 19px;
+    text-align: center;
   }
 
   .topbar nav.side-menu a i {
+    margin-left: auto;
+    color: #b8954b;
     font-size: 21px;
+    font-style: normal;
   }
 
-  .menu-overlay {
-    z-index: 90;
-  }
-
-  .topbar .menu {
-    position: relative;
-    z-index: 91;
+  .topbar nav.side-menu a:active {
+    background: #d9a53c18;
   }
 }
