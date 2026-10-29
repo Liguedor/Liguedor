@@ -7,6 +7,9 @@
 </head>
 <body>
 <header class="topbar"><a class="brand" href="#accueil"><span class="crown">♛</span><span><b>LIGUE D’OR</b><small>PRONOSTICS & ACTUALITÉS SPORTIVES</small></span></a><button class="menu" id="menuBtn" aria-label="Ouvrir le menu">☰</button><nav id="nav"><a href="#accueil">Accueil</a><a href="#pronostics">Pronostics</a><a href="#sports">Sports</a><a href="#resultats">Résultats</a><a href="#videos">Vidéos</a><a href="#vip">VIP</a><a href="#actualites">Actualités</a></nav><a class="btn gold navcta" id="telegramTop" href="#telegram">↗ Rejoindre Telegram</a></header>
+<div class="banniere-liguedor">
+  <img src="./images/banniere-liguedor.jpg" alt="LIGUE D’OR">
+</div>
 <main>
 <section class="hero" id="accueil"><div class="hero-copy">
 <p class="eyebrow">L’EXIGENCE DU SPORT</p>
@@ -30,3 +33,18 @@
 </main><footer><a class="brand" href="#accueil"><span class="crown">♛</span><span><b>LIGUE D’OR</b><small>PRONOSTICS & ACTUALITÉS SPORTIVES</small></span></a><p>© <span id="year"></span> LIGUE D’OR · Sport, analyse et transparence.</p><a href="#accueil">Retour en haut ↑</a></footer>
 <script src="app.js"></script>
 </body></html>
+
+/* Bannière LIGUE D'OR */
+.banniere-liguedor {
+  width: 100%;
+  background: #070707;
+  overflow: hidden;
+  border-bottom: 1px solid #5c4824;
+}
+
+.banniere-liguedor img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
