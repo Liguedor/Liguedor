@@ -30,7 +30,9 @@
 <section class="media-grid"><div class="media-card" id="videos"><span class="media-icon">▶</span><p class="eyebrow">LE SPORT EN IMAGES</p><h2>Vidéos <em>sportives</em></h2><p>Résumés, beaux buts, compétitions et rendez-vous sportifs.</p><a href="#contact" class="text-link">Voir les vidéos ↗</a></div><div class="media-card article" id="actualites"><span class="media-icon">▤</span><p class="eyebrow">À SUIVRE</p><h2>Actualités <em>sportives</em></h2><p>Une rubrique média pour les nouvelles, les temps forts et les histoires du sport.</p><a href="#contact" class="text-link">Lire les actualités ↗</a></div></section>
 <section class="telegram-band" id="telegram"><div><p class="eyebrow">RESTONS CONNECTÉS</p><h2>Rejoins la communauté <em>LIGUE D’OR</em></h2><p>Retrouve les publications publiques et les informations sur les accès VIP.</p></div><a class="btn gold" id="telegramBottom" href="https://t.me/+GEzP3r581d40MzZk">↗ Rejoindre Telegram</a></section>
 <section class="admin-info" id="contact"><p class="eyebrow">PROCHAINE ÉTAPE</p><h2>Ton site. Ta marque. <em>Ton espace.</em></h2><p>Cette première maquette présente le design et l’organisation. Le prochain développement ajoutera un véritable espace d’administration sécurisé pour publier tes matchs, choisir PUBLIC ou VIP et mettre les résultats à jour depuis ton iPhone.</p><button class="btn outline" id="adminInfoBtn">Comprendre la publication des pronostics</button><p class="tiny muted" id="adminNote" hidden>Pour l’instant, cette maquette n’est pas connectée à une base de données : les exemples ne sont pas des pronostics réels et aucun paiement n’est activé. Nous mettrons en place l’administration et la protection VIP avant toute mise en production.</p></section>
-</main><footer><a class="brand" href="#accueil"><span class="crown">♛</span><span><b>LIGUE D’OR</b><small>PRONOSTICS & ACTUALITÉS SPORTIVES</small></span></a><p>© <span id="year"></span> LIGUE D’OR · Sport, analyse et transparence.</p><a href="#accueil">Retour en haut ↑</a></footer>
+</main><footer><a class="brand" href="#accueil" aria-label="LIGUE D’OR">
+  <img src="./images/banniere-liguedor.jpg" alt="LIGUE D’OR">
+</a><p>© <span id="year"></span> LIGUE D’OR · Sport, analyse et transparence.</p><a href="#accueil">Retour en haut ↑</a></footer>
 <script src="app.js"></script>
 </body></html>
 
@@ -47,4 +49,32 @@
   width: 100%;
   height: auto;
   object-fit: contain;
+}
+/* Remplacer l'ancien logo par la bannière */
+.topbar .brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.topbar .brand img {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  object-fit: contain;
+}
+
+.topbar .brand > span {
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .topbar .brand {
+    flex: 1;
+  }
+
+  .topbar .brand img {
+    max-width: 100%;
+  }
 }
