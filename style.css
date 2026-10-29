@@ -636,3 +636,76 @@ body {
     background: #d9a53c18;
   }
 }
+
+/* LIGUE D’OR — menu latéral compact et premium */
+@media (max-width: 650px) {
+  .topbar nav.side-menu,
+  .topbar nav.side-menu.open {
+    position: fixed;
+    top: 12px;
+    right: 10px;
+    bottom: auto;
+    left: auto;
+    width: min(76vw, 280px);
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 10px 12px;
+    background: linear-gradient(145deg, #11100d, #050505 80%);
+    border: 1px solid #b88b32;
+    border-radius: 14px;
+    box-shadow: 0 15px 45px #000c;
+    transform: translateX(calc(100% + 24px));
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+
+  .topbar nav.side-menu.open {
+    transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .side-menu-head {
+    padding: 8px 30px 12px;
+    margin-bottom: 4px;
+  }
+
+  .side-menu-crown {
+    font-size: 28px;
+  }
+
+  .side-menu-head b {
+    font-size: 17px;
+  }
+
+  .topbar nav.side-menu a {
+    min-height: 42px;
+    padding: 8px 6px;
+    font-size: 13px;
+    gap: 9px;
+  }
+
+  .topbar nav.side-menu a span {
+    width: 23px;
+    font-size: 18px;
+  }
+
+  .topbar nav.side-menu a i {
+    font-size: 20px;
+  }
+
+  .menu-overlay {
+    z-index: 90;
+  }
+
+  .topbar .menu {
+    z-index: 101;
+  }
+}
