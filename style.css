@@ -281,3 +281,10 @@
     white-space: normal;
   }
 }
+
+/* Descendre les boutons pour mieux dégager le ballon */
+@media (max-width: 650px) {
+  .hero .actions {
+    margin-top: 42px;
+  }
+}
