@@ -283,18 +283,24 @@
 }
 
 
-/* LIGUE D'OR — boutons plus petits et plus bas */
+
+/* LIGUE D'OR — boutons compacts, alignés plus bas */
 @media (max-width: 650px) {
   .hero .actions {
-    margin-top: 38px;
-    gap: 10px;
-    transform: translateY(12px);
+    margin-top: 58px;
+    gap: 8px;
+    transform: translateY(10px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .hero .actions .btn {
-    min-height: 48px;
-    padding: 8px 6px;
-    font-size: 11px;
+    min-height: 46px;
+    padding: 8px 5px;
+    font-size: 10px;
     line-height: 1.25;
+    white-space: normal;
+    text-align: center;
+    gap: 4px;
   }
 }
+
