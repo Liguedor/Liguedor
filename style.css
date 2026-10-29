@@ -417,3 +417,54 @@ body {
   background: #3a2910;
   border-color: #ffdc83;
 }
+
+/* LIGUE D'OR — bannière pleine largeur et menu premium */
+@media (max-width: 650px) {
+  .topbar {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    background: #050505;
+  }
+
+  .topbar .brand {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .topbar .brand img {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .topbar .menu {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #d4a641;
+    border-radius: 12px;
+    background: rgba(8, 8, 8, 0.92);
+    color: #ffdc83;
+    font-size: 22px;
+    box-shadow: 0 0 18px #d99b2730;
+  }
+
+  .topbar .brand > span {
+    display: none;
+  }
+}
