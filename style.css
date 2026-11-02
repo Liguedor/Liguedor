@@ -834,3 +834,31 @@ body {
     color: #171006 !important;
   }
 }
+
+/* MENU LIGUE D'OR — FORMAT PLUS COMPACT */
+@media (max-width: 650px) {
+  .topbar nav.side-menu,
+  .topbar nav.side-menu.open {
+    width: min(68vw, 255px) !important;
+    padding: 8px 10px !important;
+  }
+
+  .side-menu-head {
+    padding: 5px 28px 9px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .side-menu-crown {
+    font-size: 25px !important;
+  }
+
+  .side-menu-head b {
+    font-size: 16px !important;
+  }
+
+  .topbar nav.side-menu a {
+    min-height: 38px !important;
+    padding: 6px 5px !important;
+    font-size: 12px !important;
+  }
+}
