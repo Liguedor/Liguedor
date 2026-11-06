@@ -57,45 +57,4 @@
 <script src="app.js"></script>
 </body></html>
 
-/* Bannière LIGUE D'OR */
-.banniere-liguedor {
-  width: 100%;
-  background: #070707;
-  overflow: hidden;
-  border-bottom: 1px solid #5c4824;
-}
-
-.banniere-liguedor img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-/* Remplacer l'ancien logo par la bannière */
-.topbar .brand {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-
-.topbar .brand img {
-  display: block;
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  object-fit: contain;
-}
-
-.topbar .brand > span {
-  display: none;
-}
-
-@media (max-width: 650px) {
-  .topbar .brand {
-    flex: 1;
   }
-
-  .topbar .brand img {
-    max-width: 100%;
-  }
-}
