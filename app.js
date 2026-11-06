@@ -104,6 +104,7 @@ const correspondancesLogos = {
 
 
 const logosNBA = {
+  'los angeles lakers': 'los-angeles-lakers.svg',
   'atlanta hawks': 'atlanta.png',
   'boston celtics': 'boston-celtics.png',
   'brooklyn nets': 'brooklyn-nets.png',
@@ -180,17 +181,33 @@ function logoEquipe(nom) {
 
   const nomBrut = String(nom).trim().toLowerCase();
 
-  // Recherche du logo NBA dans les fichiers réellement chargés
+  // Recherche NBA
   const nomNBA = logosNBA[nomBrut];
 
   if (nomNBA) {
-    const logo = fichiersLogos.find(f =>
-      f.chemin.toLowerCase() ===
-      ('./logos/nba/' + nomNBA).toLowerCase()
+    const cheminNBA = './logos/nba/' + nomNBA;
+
+    const logoNBA = fichiersLogos.find(f =>
+      f.chemin.toLowerCase() === cheminNBA.toLowerCase()
     );
 
-    if (logo) return logo.chemin;
+    if (logoNBA) return logoNBA.chemin;
   }
+
+  // Recherche football
+  const alias = correspondancesLogos[nomBrut];
+  const nomRecherche = normaliserNom(
+    (alias || nom).replace(/\.(png|svg)$/i, '')
+  );
+
+  const logoFootball = fichiersLogos.find(f =>
+    f.chemin.startsWith('./logos/') &&
+    !f.chemin.startsWith('./logos/nba/') &&
+    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) === nomRecherche
+  );
+
+  return logoFootball ? logoFootball.chemin : '';
+}
 
   // Recherche du logo de football
   const alias = correspondancesLogos[nomBrut];
@@ -365,10 +382,12 @@ function normaliserSport(sport) {
 }
 
 function iconeSport(sport) {
-  const s = normaliserSport(sport);
+  const s = String(sport || '').toLowerCase();
 
-  if (s === 'tennis') return '🎾';
-  if (s === 'basket') return '🏀';
+  if (s.includes('tennis')) return '🎾';
+  if (s.includes('basket') || s.includes('nba')) return '🏀';
+  if (s.includes('volley')) return '🏐';
+  if (s.includes('hockey')) return '🏒';
 
   return '⚽';
 }
