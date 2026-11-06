@@ -210,21 +210,6 @@ function logoEquipe(nom) {
   return logoFootball ? logoFootball.chemin : '';
 }
 
-  // Recherche du logo de football
-  const alias = correspondancesLogos[nomBrut];
-  const nomRecherche = normaliserNom(
-    (alias || nom).replace(/\.(png|svg)$/i, '')
-  );
-
-  const logo = fichiersLogos.find(f =>
-    f.chemin.startsWith('./logos/') &&
-    !f.chemin.startsWith('./logos/nba/') &&
-    normaliserNom(f.nom.replace(/\.(png|svg)$/i, '')) === nomRecherche
-  );
-
-  return logo ? logo.chemin : '';
-}
-
 function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;',
