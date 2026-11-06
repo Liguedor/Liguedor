@@ -911,7 +911,7 @@ body {
     margin: 3px 0 !important;
   }
 }
-/* LIGUE D'OR — MENU VERSION 6 */
+/* LIGUE D'OR — MENU VERSION 6 AJUSTÉE */
 @media (max-width: 650px) {
   .topbar nav.side-menu,
   .topbar nav.side-menu.open {
@@ -920,22 +920,23 @@ body {
     right: 10px !important;
     left: auto !important;
     bottom: auto !important;
-    width: min(320px, 82vw) !important;
+
+    width: min(260px, 68vw) !important;
     max-height: 65vh !important;
     overflow-y: auto !important;
     z-index: 102 !important;
     pointer-events: auto !important;
   }
 
-  .topbar nav.side-menu a[href="#vip"] {
-    background: linear-gradient(135deg, #ffe49a, #d69a25);
-    color: #171006;
-    font-weight: 800;
-    border-radius: 7px;
-  }
-
   .topbar nav.side-menu a {
     cursor: pointer;
     pointer-events: auto;
+  }
+
+  .topbar nav.side-menu a[href="#vip"] {
+    background: linear-gradient(135deg, #ffe49a, #d69a25) !important;
+    color: #171006 !important;
+    font-weight: 800 !important;
+    border-radius: 7px !important;
   }
 }
