@@ -862,3 +862,52 @@ body {
     font-size: 12px !important;
   }
 }
+
+/* LIGUE D'OR — menu mobile compact */
+@media (max-width: 650px) {
+  .topbar nav.side-menu,
+  .topbar nav.side-menu.open {
+    top: 12px !important;
+    right: 10px !important;
+    width: min(65vw, 245px) !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 7px 9px !important;
+    gap: 0 !important;
+  }
+
+  .side-menu-head {
+    padding: 3px 25px 7px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .side-menu-crown {
+    font-size: 23px !important;
+  }
+
+  .side-menu-head b {
+    font-size: 15px !important;
+  }
+
+  .topbar nav.side-menu a {
+    flex: 0 0 34px !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 3px 4px !important;
+    font-size: 11px !important;
+    gap: 7px !important;
+  }
+
+  .topbar nav.side-menu a span {
+    width: 20px !important;
+    font-size: 16px !important;
+  }
+
+  .topbar nav.side-menu a i {
+    font-size: 17px !important;
+  }
+
+  .topbar nav.side-menu a[href="#vip"] {
+    margin: 3px 0 !important;
+  }
+}
