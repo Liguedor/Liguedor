@@ -105,7 +105,7 @@ const correspondancesLogos = {
 
 const logosNBA = {
   'los angeles lakers': 'los-angeles-lakers.svg',
-  'atlanta hawks': 'atlanta.png',
+  'atlanta hawks': 'Atlanta.png',
   'boston celtics': 'boston-celtics.png',
   'brooklyn nets': 'brooklyn-nets.png',
   'charlotte hornets': 'charlotte-hornets.png',
@@ -119,6 +119,7 @@ const logosNBA = {
   'indiana pacers': 'indiana-pacers.png',
   'la clippers': 'la-clippers.png',
   'los angeles clippers': 'la-clippers.png',
+  'los angeles lakers': 'los-angeles-lakers.svg',
   'lakers': 'los-angeles-lakers.svg',
   'memphis grizzlies': 'memphis-grizzlies.png',
   'miami heat': 'miami-heat.png',
@@ -130,8 +131,8 @@ const logosNBA = {
   'orlando magic': 'orlando-magic.png',
   'philadelphia 76ers': 'philadelphia-76ers.png',
   'phoenix suns': 'phoenix-suns.png',
-  'portland trail blazers': 'portland-trail-blazers.png',
-  'sacramento kings': 'sacramento-kings.png',
+  'portland trail blazers': 'portland.png',
+  'sacramento kings': 'sacramento.png',
   'san antonio spurs': 'san-antonio-spurs.png',
   'toronto raptors': 'toronto-raptors.png',
   'utah jazz': 'utah-jazz.png',
