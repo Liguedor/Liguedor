@@ -911,7 +911,7 @@ body {
     margin: 3px 0 !important;
   }
 }
-/* LIGUE D'OR — taille Confort et clics du menu */
+/* LIGUE D'OR — menu format Confort ajusté */
 @media (max-width: 650px) {
   .topbar {
     position: relative;
@@ -926,11 +926,14 @@ body {
   .topbar nav.side-menu,
   .topbar nav.side-menu.open {
     z-index: 102;
-    width: min(82vw, 320px) !important;
+    width: min(68vw, 270px) !important;
     max-height: 65vh !important;
+    right: 10px !important;
   }
 
   .topbar nav.side-menu a {
     min-height: 42px;
+    cursor: pointer;
+    pointer-events: auto;
   }
 }
