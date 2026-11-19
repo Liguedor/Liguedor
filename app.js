@@ -495,3 +495,65 @@ if (menuBtn && nav && menuOverlay) {
     if (event.key === 'Escape') ouvrirMenu(false);
   });
 }
+
+// =====================================
+// LIGUE D'OR — CONNEXION ADMIN SÉCURISÉE
+// =====================================
+
+const adminClient = window.supabase.createClient(
+  "https://qvnmhvbuwbwtlemmqwxu.supabase.co",
+  "sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU"
+);
+
+const adminLogin = document.getElementById("adminLogin");
+const adminForm = document.getElementById("adminLoginForm");
+const adminMessage = document.getElementById("adminMessage");
+
+// Le formulaire est accessible avec l'adresse du site suivie de #admin
+function afficherConnexionAdmin() {
+  if (adminLogin) {
+    adminLogin.hidden = window.location.hash !== "#admin";
+  }
+}
+
+afficherConnexionAdmin();
+window.addEventListener("hashchange", afficherConnexionAdmin);
+
+if (adminForm) {
+  adminForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value;
+
+    adminMessage.textContent = "Vérification en cours...";
+
+    try {
+      const { data, error } = await adminClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      const { data: admin, error: adminError } = await adminClient
+        .from("admins")
+        .select("user_id")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+      if (adminError) throw adminError;
+
+      if (!admin) {
+        await adminClient.auth.signOut();
+        throw new Error("Ce compte n'est pas autorisé à administrer le site.");
+      }
+
+      adminMessage.textContent = "Connexion administrateur réussie !";
+      console.log("Administrateur authentifié.");
+
+    } catch (error) {
+      adminMessage.textContent = error.message;
+    }
+  });
+}
