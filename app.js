@@ -499,7 +499,7 @@ if (menuBtn && nav && menuOverlay) {
 // =====================================
 // LIGUE D'OR — CONNEXION ADMIN SÉCURISÉE
 // =====================================
-
+console.log("Supabase chargé :", !!window.supabase);
 const adminClient = window.supabase.createClient(
   "https://qvnmhvbuwbwtlemmqwxu.supabase.co",
   "sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU"
