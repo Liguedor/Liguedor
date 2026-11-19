@@ -500,6 +500,11 @@ if (menuBtn && nav && menuOverlay) {
 // LIGUE D'OR — CONNEXION ADMIN SÉCURISÉE
 // =====================================
 console.log("Supabase chargé :", !!window.supabase);
+console.log("TEST ADMIN : app.js est arrivé ici");
+
+if (!window.supabase) {
+  console.error("ERREUR : la bibliothèque Supabase ne s'est pas chargée.");
+}
 const adminClient = window.supabase.createClient(
   "https://qvnmhvbuwbwtlemmqwxu.supabase.co",
   "sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU"
