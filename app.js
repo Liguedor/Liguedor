@@ -496,25 +496,15 @@ if (menuBtn && nav && menuOverlay) {
   });
 }
 
+
 // =====================================
 // LIGUE D'OR — CONNEXION ADMIN SÉCURISÉE
 // =====================================
-console.log("Supabase chargé :", !!window.supabase);
-console.log("TEST ADMIN : app.js est arrivé ici");
-
-if (!window.supabase) {
-  console.error("ERREUR : la bibliothèque Supabase ne s'est pas chargée.");
-}
-const adminClient = window.supabase.createClient(
-  "https://qvnmhvbuwbwtlemmqwxu.supabase.co",
-  "sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU"
-);
 
 const adminLogin = document.getElementById("adminLogin");
 const adminForm = document.getElementById("adminLoginForm");
 const adminMessage = document.getElementById("adminMessage");
 
-// Le formulaire est accessible avec l'adresse du site suivie de #admin
 function afficherConnexionAdmin() {
   if (adminLogin) {
     adminLogin.hidden = window.location.hash !== "#admin";
@@ -524,7 +514,19 @@ function afficherConnexionAdmin() {
 afficherConnexionAdmin();
 window.addEventListener("hashchange", afficherConnexionAdmin);
 
-if (adminForm) {
+let adminClient = null;
+
+if (window.supabase && window.supabase.createClient) {
+  adminClient = window.supabase.createClient(
+    "https://qvnmhvbuwbwtlemmqwxu.supabase.co",
+    "sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU"
+  );
+} else if (adminMessage) {
+  adminMessage.textContent =
+    "Erreur : le service de connexion ne s'est pas chargé. Rechargez la page.";
+}
+
+if (adminForm && adminClient) {
   adminForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -555,7 +557,6 @@ if (adminForm) {
       }
 
       adminMessage.textContent = "Connexion administrateur réussie !";
-      console.log("Administrateur authentifié.");
 
     } catch (error) {
       adminMessage.textContent = error.message;
