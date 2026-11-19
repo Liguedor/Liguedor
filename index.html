@@ -69,7 +69,26 @@
   <p>© 2026 LIGUE D’OR · Sport, analyse et transparence.</p>
   <a href="#accueil">Retour en haut ↑</a>
 </footer>
-
-<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<section id="adminLogin" class="admin-login" hidden>
+  <h2>Administration LIGUE D’OR</h2>
+  <form id="adminLoginForm">
+    <input
+      id="adminEmail"
+      type="email"
+      placeholder="Adresse e-mail"
+      required
+    >
+    <input
+      id="adminPassword"
+      type="password"
+      placeholder="Mot de passe"
+      required
+    >
+    <button type="submit">Se connecter</button>
+    <p id="adminMessage"></p>
+  </form>
+</section>
+  <script src="app.js"></script>
 </body>
 </html>
