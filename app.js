@@ -233,7 +233,7 @@ function afficherPronostic(p) {
   const categorie = String(valeur(p, 'categorie', 'catégorie')).toLowerCase();
   const vip = categorie === 'vip';
 
-  const sport = valeur(p, 'sport') || 'Sport';
+  const sport = (valeur(p, 'sport') || 'Sport').toUpperCase();
   const evenement = valeur(p, 'evenement', 'événement') || 'Match à préciser';
   const equipeDomicile = valeur(p, 'equipe_domicile');
   const equipeExterieur = valeur(p, 'equipe_exterieur');
