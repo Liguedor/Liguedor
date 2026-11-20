@@ -431,6 +431,24 @@ document.querySelectorAll('.filter').forEach(button => {
     currentFilter = button.dataset.filter || 'Tous';
     afficherListe();
   });
+  document.querySelectorAll('.sport-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const nom = card.querySelector('b')?.textContent.trim().toLowerCase();
+
+    let filtre = '';
+
+    if (nom.includes('football')) filtre = 'Football';
+    else if (nom.includes('tennis')) filtre = 'Tennis';
+    else if (nom.includes('multisports')) filtre = 'Multisports';
+
+    if (filtre) {
+      const bouton = document.querySelector(
+        `.filter[data-filter="${filtre}"]`
+      );
+      if (bouton) bouton.click();
+    }
+  });
+});
 });
 
 chargerLogos().then(() => chargerPronostics());
