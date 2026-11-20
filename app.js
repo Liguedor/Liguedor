@@ -497,33 +497,177 @@ if (menuBtn && nav && menuOverlay) {
 }
 
 
+
 // =====================================
-// LIGUE D'OR — CONNEXION ADMIN SÉCURISÉE
+// LIGUE D'OR — ADMINISTRATION
 // =====================================
 
 const adminLogin = document.getElementById("adminLogin");
 const adminForm = document.getElementById("adminLoginForm");
 const adminMessage = document.getElementById("adminMessage");
 
+let adminClient = null;
+let adminDashboard = null;
+
+if (window.supabase && window.supabase.createClient) {
+  adminClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+}
+
+// Création de l'espace administrateur
+if (adminLogin) {
+  adminDashboard = document.createElement("section");
+  adminDashboard.id = "adminDashboard";
+  adminDashboard.hidden = true;
+
+  adminDashboard.style.cssText = `
+    max-width:1100px;
+    margin:30px auto;
+    padding:20px;
+    color:#fff;
+    background:#111;
+    border:1px solid #b58a35;
+    border-radius:16px;
+  `;
+
+  adminLogin.insertAdjacentElement("afterend", adminDashboard);
+}
+
 function afficherConnexionAdmin() {
-  if (adminLogin) {
-    adminLogin.hidden = window.location.hash !== "#admin";
+  const actif = window.location.hash === "#admin";
+
+  if (adminLogin) adminLogin.hidden = !actif;
+
+  if (!actif && adminDashboard) {
+    adminDashboard.hidden = true;
   }
 }
 
 afficherConnexionAdmin();
 window.addEventListener("hashchange", afficherConnexionAdmin);
 
-let adminClient = null;
-
-if (window.supabase && window.supabase.createClient) {
-  adminClient = window.supabase.createClient(
-    "https://qvnmhvbuwbwtlemmqwxu.supabase.co",
-    "sb_publishable_B46lm_Pn2srdHQFSJzXe-Q_5fR5rMGU"
+function afficherAccueilAdmin(pronostics) {
+  const publics = pronostics.filter(p =>
+    String(p.categorie || "").toLowerCase() === "public"
   );
-} else if (adminMessage) {
-  adminMessage.textContent =
-    "Erreur : le service de connexion ne s'est pas chargé. Rechargez la page.";
+
+  const vips = pronostics.filter(p =>
+    String(p.categorie || "").toLowerCase() === "vip"
+  );
+
+  const gagnes = pronostics.filter(p => p.resultat === "gagne").length;
+  const perdus = pronostics.filter(p => p.resultat === "perdu").length;
+  const attente = pronostics.filter(p =>
+    !["gagne", "perdu", "annule", "annulé"].includes(
+      String(p.resultat || "").toLowerCase()
+    )
+  ).length;
+
+  const lignes = pronostics.map(p => `
+    <div style="
+      padding:13px;
+      margin:10px 0;
+      background:#202020;
+      border:1px solid #444;
+      border-radius:10px;
+    ">
+      <b>${esc(p.evenement || "Événement à préciser")}</b>
+      <div style="color:#d5ad55;margin-top:6px">
+        ${esc(p.categorie || "—")} ·
+        ${esc(p.sport || "—")}
+      </div>
+      <div style="margin-top:5px">
+        Résultat : ${esc(p.resultat || "en_attente")}
+        · Cote : ${esc(p.cote || "—")}
+      </div>
+    </div>
+  `).join("");
+
+  adminDashboard.innerHTML = `
+    <h2 style="color:#e4bd62">👑 LIGUE D’OR — ADMIN</h2>
+    <p>Bienvenue dans ton espace de gestion.</p>
+
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin:20px 0;
+    ">
+      <div style="background:#222;padding:16px;border-radius:10px">
+        <small>PRONOSTICS PUBLICS</small>
+        <h2>${publics.length}</h2>
+      </div>
+      <div style="background:#222;padding:16px;border-radius:10px">
+        <small>PRONOSTICS VIP</small>
+        <h2>${vips.length}</h2>
+      </div>
+      <div style="background:#222;padding:16px;border-radius:10px">
+        <small>GAGNÉS</small>
+        <h2>${gagnes}</h2>
+      </div>
+      <div style="background:#222;padding:16px;border-radius:10px">
+        <small>PERDUS</small>
+        <h2>${perdus}</h2>
+      </div>
+    </div>
+
+    <p>Pronostics en attente : <b>${attente}</b></p>
+
+    <h3 style="color:#e4bd62">Derniers pronostics</h3>
+
+    ${lignes || "<p>Aucun pronostic enregistré.</p>"}
+
+    <button id="adminRefresh" style="
+      padding:12px;
+      margin-top:15px;
+      background:#d6ad52;
+      border:0;
+      border-radius:8px;
+      font-weight:bold;
+    ">Actualiser les données</button>
+
+    <button id="adminLogout" style="
+      padding:12px;
+      margin:15px 0 0 8px;
+      background:#444;
+      color:white;
+      border:0;
+      border-radius:8px;
+    ">Déconnexion</button>
+  `;
+
+  adminDashboard.hidden = false;
+
+  adminDashboard.querySelector("#adminRefresh")
+    .addEventListener("click", chargerDashboardAdmin);
+
+  adminDashboard.querySelector("#adminLogout")
+    .addEventListener("click", async () => {
+      await adminClient.auth.signOut();
+      adminDashboard.hidden = true;
+      adminLogin.hidden = window.location.hash !== "#admin";
+      if (adminMessage) adminMessage.textContent = "Vous êtes déconnecté.";
+    });
+}
+
+async function chargerDashboardAdmin() {
+  adminDashboard.innerHTML = "<p>Chargement des données...</p>";
+
+  const { data, error } = await adminClient
+    .from("pronostics")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(100);
+
+  if (error) {
+    adminDashboard.innerHTML =
+      "<p>Erreur de chargement : " + esc(error.message) + "</p>";
+    return;
+  }
+
+  afficherAccueilAdmin(data || []);
 }
 
 if (adminForm && adminClient) {
@@ -553,13 +697,17 @@ if (adminForm && adminClient) {
 
       if (!admin) {
         await adminClient.auth.signOut();
-        throw new Error("Ce compte n'est pas autorisé à administrer le site.");
+        throw new Error("Compte non autorisé.");
       }
 
-      adminMessage.textContent = "Connexion administrateur réussie !";
+      adminMessage.textContent = "Connexion réussie !";
+
+      adminLogin.hidden = true;
+      await chargerDashboardAdmin();
 
     } catch (error) {
       adminMessage.textContent = error.message;
     }
   });
 }
+
