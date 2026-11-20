@@ -597,13 +597,13 @@ function afficherAccueilAdmin(pronostics) {
     <form id="nouveauPronostic" style="display:grid;gap:12px">
       <label>Sport</label>
       <select name="sport" required style="padding:12px">
-        <option value="">Choisir un sport</option>
-        <option>Football</option>
-        <option>Tennis</option>
-        <option>Basketball</option>
-        <option>Multisports</option>
-        <option>MMA</option>
-      </select>
+  <option value="">Choisir une catégorie</option>
+  <option value="football">FOOTBALL</option>
+  <option value="tennis">TENNIS</option>
+  <option value="basket">BASKET</option>
+  <option value="volleyball">VOLLEY</option>
+  <option value="autres">MMA / HOCKEY / BADMINTON / RUGBY</option>
+</select>
 
       <label>Événement / Match</label>
       <input name="evenement" required placeholder="Ex : PSG - Marseille" style="padding:12px">
