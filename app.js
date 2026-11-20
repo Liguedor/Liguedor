@@ -336,31 +336,29 @@ afficherResultats();
 
 
 function normaliserSport(sport) {
-  const s = String(sport ?? '')
-    .toLowerCase()
-    .trim();
+  const s = String(sport ?? '').toLowerCase().trim();
 
-  if (s === 'all' || s === 'tous') return 'tous';
-  if (s.includes('football') || s === 'foot') return 'football';
-  if (s.includes('tennis')) return 'tennis';
+  if (s === 'tous' || s === 'all') return 'tous';
 
-  const multisports = [
-    'basket', 'nba',
-    'volleyball', 'volley',
+  if (s === 'football' || s === 'foot') {
+    return 'football';
+  }
+
+  if (s === 'tennis') {
+    return 'tennis';
+  }
+
+  const sportsMultisports = [
+    'basket',
+    'volleyball',
+    'mma',
     'hockey',
     'badminton',
     'rugby',
-    'baseball',
-    'ping-pong', 'ping pong', 'tennis de table',
-    'mma',
-    'boxe', 'boxing'
+    'autres'
   ];
 
-  if (multisports.some(sportNom => s.includes(sportNom))) {
-    return 'multisports';
-  }
-
-  if (s.includes('multisport') || s.includes('autre')) {
+  if (sportsMultisports.includes(s)) {
     return 'multisports';
   }
 
