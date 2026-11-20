@@ -498,6 +498,7 @@ if (menuBtn && nav && menuOverlay) {
 
 
 
+
 // =====================================
 // LIGUE D'OR — ADMINISTRATION
 // =====================================
@@ -510,18 +511,13 @@ let adminClient = null;
 let adminDashboard = null;
 
 if (window.supabase && window.supabase.createClient) {
-  adminClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+  adminClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
-// Création de l'espace administrateur
 if (adminLogin) {
   adminDashboard = document.createElement("section");
   adminDashboard.id = "adminDashboard";
   adminDashboard.hidden = true;
-
   adminDashboard.style.cssText = `
     max-width:1100px;
     margin:30px auto;
@@ -531,18 +527,13 @@ if (adminLogin) {
     border:1px solid #b58a35;
     border-radius:16px;
   `;
-
   adminLogin.insertAdjacentElement("afterend", adminDashboard);
 }
 
 function afficherConnexionAdmin() {
   const actif = window.location.hash === "#admin";
-
   if (adminLogin) adminLogin.hidden = !actif;
-
-  if (!actif && adminDashboard) {
-    adminDashboard.hidden = true;
-  }
+  if (!actif && adminDashboard) adminDashboard.hidden = true;
 }
 
 afficherConnexionAdmin();
@@ -552,7 +543,6 @@ function afficherAccueilAdmin(pronostics) {
   const publics = pronostics.filter(p =>
     String(p.categorie || "").toLowerCase() === "public"
   );
-
   const vips = pronostics.filter(p =>
     String(p.categorie || "").toLowerCase() === "vip"
   );
@@ -566,21 +556,15 @@ function afficherAccueilAdmin(pronostics) {
   ).length;
 
   const lignes = pronostics.map(p => `
-    <div style="
-      padding:13px;
-      margin:10px 0;
-      background:#202020;
-      border:1px solid #444;
-      border-radius:10px;
-    ">
+    <div style="padding:13px;margin:10px 0;background:#202020;border:1px solid #444;border-radius:10px">
       <b>${esc(p.evenement || "Événement à préciser")}</b>
       <div style="color:#d5ad55;margin-top:6px">
-        ${esc(p.categorie || "—")} ·
-        ${esc(p.sport || "—")}
+        ${esc(p.categorie || "—")} · ${esc(p.sport || "—")}
       </div>
       <div style="margin-top:5px">
         Résultat : ${esc(p.resultat || "en_attente")}
-        · Cote : ${esc(p.cote || "—")}
+        · Cote : ${esc(p.cote ?? "—")}
+        · ${p.publie ? "Publié" : "Brouillon"}
       </div>
     </div>
   `).join("");
@@ -589,53 +573,89 @@ function afficherAccueilAdmin(pronostics) {
     <h2 style="color:#e4bd62">👑 LIGUE D’OR — ADMIN</h2>
     <p>Bienvenue dans ton espace de gestion.</p>
 
-    <div style="
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-      margin:20px 0;
-    ">
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0">
       <div style="background:#222;padding:16px;border-radius:10px">
-        <small>PRONOSTICS PUBLICS</small>
-        <h2>${publics.length}</h2>
+        <small>PRONOSTICS PUBLICS</small><h2>${publics.length}</h2>
       </div>
       <div style="background:#222;padding:16px;border-radius:10px">
-        <small>PRONOSTICS VIP</small>
-        <h2>${vips.length}</h2>
+        <small>PRONOSTICS VIP</small><h2>${vips.length}</h2>
       </div>
       <div style="background:#222;padding:16px;border-radius:10px">
-        <small>GAGNÉS</small>
-        <h2>${gagnes}</h2>
+        <small>GAGNÉS</small><h2>${gagnes}</h2>
       </div>
       <div style="background:#222;padding:16px;border-radius:10px">
-        <small>PERDUS</small>
-        <h2>${perdus}</h2>
+        <small>PERDUS</small><h2>${perdus}</h2>
       </div>
     </div>
 
     <p>Pronostics en attente : <b>${attente}</b></p>
 
-    <h3 style="color:#e4bd62">Derniers pronostics</h3>
+    <hr style="border-color:#555;margin:25px 0">
 
+    <h2 style="color:#e4bd62">➕ Ajouter un pronostic</h2>
+
+    <form id="nouveauPronostic" style="display:grid;gap:12px">
+      <label>Sport</label>
+      <select name="sport" required style="padding:12px">
+        <option value="">Choisir un sport</option>
+        <option>Football</option>
+        <option>Tennis</option>
+        <option>Basketball</option>
+        <option>Multisports</option>
+        <option>MMA</option>
+      </select>
+
+      <label>Événement / Match</label>
+      <input name="evenement" required placeholder="Ex : PSG - Marseille" style="padding:12px">
+
+      <label>Équipe à domicile (facultatif)</label>
+      <input name="equipe_domicile" placeholder="Équipe à domicile" style="padding:12px">
+
+      <label>Équipe à l'extérieur (facultatif)</label>
+      <input name="equipe_exterieur" placeholder="Équipe à l'extérieur" style="padding:12px">
+
+      <label>Pronostic</label>
+      <input name="pronostic" required placeholder="Ex : Victoire du PSG" style="padding:12px">
+
+      <label>Cote</label>
+      <input name="cote" type="number" min="1.01" step="0.01" required placeholder="Ex : 1.75" style="padding:12px">
+
+      <label>Confiance (%)</label>
+      <input name="confiance" type="number" min="1" max="100" required placeholder="Ex : 85" style="padding:12px">
+
+      <label>Analyse</label>
+      <textarea name="analyse" rows="5" required placeholder="Écris ton analyse ici..." style="padding:12px"></textarea>
+
+      <label>Catégorie</label>
+      <select name="categorie" required style="padding:12px">
+        <option value="public">Public</option>
+        <option value="vip">VIP</option>
+      </select>
+
+      <label>Publication</label>
+      <select name="publie" required style="padding:12px">
+        <option value="false">Brouillon — non visible</option>
+        <option value="true">Publié — visible selon la catégorie</option>
+      </select>
+
+      <button type="submit" style="padding:15px;background:#d6ad52;border:0;border-radius:8px;font-weight:bold">
+        ENREGISTRER LE PRONOSTIC
+      </button>
+      <p id="creationMessage"></p>
+    </form>
+
+    <hr style="border-color:#555;margin:25px 0">
+
+    <h3 style="color:#e4bd62">Derniers pronostics</h3>
     ${lignes || "<p>Aucun pronostic enregistré.</p>"}
 
-    <button id="adminRefresh" style="
-      padding:12px;
-      margin-top:15px;
-      background:#d6ad52;
-      border:0;
-      border-radius:8px;
-      font-weight:bold;
-    ">Actualiser les données</button>
+    <button id="adminRefresh" style="padding:12px;background:#d6ad52;border:0;border-radius:8px;font-weight:bold">
+      Actualiser les données
+    </button>
 
-    <button id="adminLogout" style="
-      padding:12px;
-      margin:15px 0 0 8px;
-      background:#444;
-      color:white;
-      border:0;
-      border-radius:8px;
-    ">Déconnexion</button>
+    <button id="adminLogout" style="padding:12px;margin-left:8px;background:#444;color:white;border:0;border-radius:8px">
+      Déconnexion
+    </button>
   `;
 
   adminDashboard.hidden = false;
@@ -650,6 +670,51 @@ function afficherAccueilAdmin(pronostics) {
       adminLogin.hidden = window.location.hash !== "#admin";
       if (adminMessage) adminMessage.textContent = "Vous êtes déconnecté.";
     });
+
+  adminDashboard.querySelector("#nouveauPronostic")
+    .addEventListener("submit", enregistrerPronostic);
+}
+
+async function enregistrerPronostic(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const message = adminDashboard.querySelector("#creationMessage");
+  const bouton = form.querySelector('button[type="submit"]');
+  const valeurs = new FormData(form);
+
+  const pronostic = {
+    sport: valeurs.get("sport"),
+    evenement: valeurs.get("evenement").trim(),
+    equipe_domicile: valeurs.get("equipe_domicile").trim() || null,
+    equipe_exterieur: valeurs.get("equipe_exterieur").trim() || null,
+    pronostic: valeurs.get("pronostic").trim(),
+    cote: Number(valeurs.get("cote")),
+    confiance: Number(valeurs.get("confiance")),
+    analyse: valeurs.get("analyse").trim(),
+    categorie: valeurs.get("categorie"),
+    publie: valeurs.get("publie") === "true",
+    resultat: "en_attente"
+  };
+
+  bouton.disabled = true;
+  message.textContent = "Enregistrement en cours...";
+
+  try {
+    const { error } = await adminClient
+      .from("pronostics")
+      .insert([pronostic]);
+
+    if (error) throw error;
+
+    message.textContent = "✅ Pronostic enregistré avec succès !";
+    form.reset();
+    await chargerDashboardAdmin();
+
+  } catch (error) {
+    message.textContent = "❌ Erreur : " + error.message;
+    bouton.disabled = false;
+  }
 }
 
 async function chargerDashboardAdmin() {
@@ -701,7 +766,6 @@ if (adminForm && adminClient) {
       }
 
       adminMessage.textContent = "Connexion réussie !";
-
       adminLogin.hidden = true;
       await chargerDashboardAdmin();
 
@@ -710,4 +774,3 @@ if (adminForm && adminClient) {
     }
   });
 }
-
