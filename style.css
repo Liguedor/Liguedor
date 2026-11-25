@@ -984,3 +984,78 @@ body {
     pointer-events: auto !important;
   }
 }
+
+/* LIGUE D'OR — 4 cartes sportives avec images */
+.sport-card {
+  position: relative;
+  min-height: 190px;
+  isolation: isolate;
+  overflow: hidden;
+  background: #080808;
+}
+
+.sport-card-image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+
+.sport-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    0deg,
+    rgba(0,0,0,.95) 0%,
+    rgba(0,0,0,.48) 55%,
+    rgba(0,0,0,.08) 100%
+  );
+}
+
+.sport-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+}
+
+.sport-card-content b {
+  color: #ffdc83;
+  font-size: 15px;
+  letter-spacing: .08em;
+}
+
+.sport-card-content small {
+  color: #fff;
+  font-size: 11px;
+}
+
+.sport-card .go {
+  z-index: 2;
+  color: #ffdc83;
+}
+
+.sport-card:hover .sport-card-image {
+  transform: scale(1.06);
+}
+
+@media (max-width: 650px) {
+  .sport-card {
+    min-height: 165px;
+  }
+
+  .sport-card-content b {
+    font-size: 12px;
+  }
+
+  .sport-card-content small {
+    font-size: 10px;
+  }
+}
