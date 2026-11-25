@@ -572,19 +572,28 @@ function afficherAccueilAdmin(pronostics) {
   ).length;
 
   const lignes = pronostics.map(p => `
-    <div style="padding:13px;margin:10px 0;background:#202020;border:1px solid #444;border-radius:10px">
-      <b>${esc(p.evenement || "Événement à préciser")}</b>
-      <div style="color:#d5ad55;margin-top:6px">
-        ${esc(p.categorie || "—")} · ${esc(p.sport || "—")}
-      </div>
-      <div style="margin-top:5px">
-        Résultat : ${esc(p.resultat || "en_attente")}
-        · Cote : ${esc(p.cote ?? "—")}
-        · ${p.publie ? "Publié" : "Brouillon"}
-      </div>
-    </div>
-  `).join("");
+  <div data-pronostic-id="${esc(p.id)}"
+       style="padding:13px;margin:10px 0;background:#202020;border:1px solid #444;border-radius:10px">
 
+    <b>${esc(p.evenement || "Événement à préciser")}</b>
+
+    <div style="color:#d5ad55;margin-top:6px">
+      ${esc(p.categorie || "—")} · ${esc(p.sport || "—")}
+    </div>
+
+    <div style="margin-top:5px">
+      Résultat : ${esc(p.resultat || "en_attente")}
+      · Cote : ${esc(p.cote ?? "—")}
+      · ${p.publie ? "Publié" : "Brouillon"}
+    </div>
+
+    <button type="button"
+      data-edit-id="${esc(p.id)}"
+      style="margin-top:12px;padding:10px;background:#d6ad52;border:0;border-radius:7px;font-weight:bold">
+      ✏️ MODIFIER
+    </button>
+  </div>
+`).join("");
   adminDashboard.innerHTML = `
     <h2 style="color:#e4bd62">👑 LIGUE D’OR — ADMIN</h2>
     <p>Bienvenue dans ton espace de gestion.</p>
@@ -675,7 +684,11 @@ function afficherAccueilAdmin(pronostics) {
   `;
 
   adminDashboard.hidden = false;
-
+adminDashboard.querySelectorAll("[data-edit-id]").forEach(bouton => {
+  bouton.addEventListener("click", () => {
+    ouvrirEditionPronostic(bouton.dataset.editId, pronostics);
+  });
+});
   adminDashboard.querySelector("#adminRefresh")
     .addEventListener("click", chargerDashboardAdmin);
 
@@ -689,6 +702,121 @@ function afficherAccueilAdmin(pronostics) {
 
   adminDashboard.querySelector("#nouveauPronostic")
     .addEventListener("submit", enregistrerPronostic);
+}
+
+async function ouvrirEditionPronostic(id, pronostics) {
+  const p = pronostics.find(item => String(item.id) === String(id));
+  if (!p) return;
+
+  const carte = [...adminDashboard.querySelectorAll("[data-pronostic-id]")]
+    .find(el => el.dataset.pronosticId === String(id));
+
+  if (!carte) return;
+
+  carte.innerHTML = `
+    <h3 style="color:#e4bd62">Modifier le pronostic</h3>
+
+    <form id="formEdition" style="display:grid;gap:10px">
+      <label>Sport</label>
+      <select name="sport" required style="padding:12px">
+        ${["football","tennis","basket","volleyball","autres"].map(s =>
+          `<option value="${s}" ${p.sport === s ? "selected" : ""}>${s.toUpperCase()}</option>`
+        ).join("")}
+      </select>
+
+      <label>Événement / Match</label>
+      <input name="evenement" required value="${esc(p.evenement)}" style="padding:12px">
+
+      <label>Équipe à domicile</label>
+      <input name="equipe_domicile" value="${esc(p.equipe_domicile || "")}" style="padding:12px">
+
+      <label>Équipe à l'extérieur</label>
+      <input name="equipe_exterieur" value="${esc(p.equipe_exterieur || "")}" style="padding:12px">
+
+      <label>Pronostic</label>
+      <input name="pronostic" required value="${esc(p.pronostic || "")}" style="padding:12px">
+
+      <label>Cote</label>
+      <input name="cote" type="number" min="1.01" step="0.01"
+        required value="${esc(p.cote)}" style="padding:12px">
+
+      <label>Confiance (%)</label>
+      <input name="confiance" type="number" min="1" max="100"
+        required value="${esc(p.confiance)}" style="padding:12px">
+
+      <label>Analyse</label>
+      <textarea name="analyse" rows="5" required style="padding:12px">${esc(p.analyse || "")}</textarea>
+
+      <label>Catégorie</label>
+      <select name="categorie" style="padding:12px">
+        <option value="public" ${p.categorie === "public" ? "selected" : ""}>Public</option>
+        <option value="vip" ${p.categorie === "vip" ? "selected" : ""}>VIP</option>
+      </select>
+
+      <label>Publication</label>
+      <select name="publie" style="padding:12px">
+        <option value="false" ${!p.publie ? "selected" : ""}>Brouillon</option>
+        <option value="true" ${p.publie ? "selected" : ""}>Publié</option>
+      </select>
+
+      <button type="submit" style="padding:13px;background:#d6ad52;border:0;border-radius:8px;font-weight:bold">
+        ENREGISTRER LES MODIFICATIONS
+      </button>
+
+      <button type="button" id="annulerEdition"
+        style="padding:12px;background:#444;color:white;border:0;border-radius:8px">
+        ANNULER
+      </button>
+
+      <p id="editionMessage"></p>
+    </form>
+  `;
+
+  const form = carte.querySelector("#formEdition");
+
+  carte.querySelector("#annulerEdition").addEventListener("click", () => {
+    afficherAccueilAdmin(pronostics);
+  });
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const valeurs = new FormData(form);
+    const message = carte.querySelector("#editionMessage");
+    const bouton = form.querySelector('button[type="submit"]');
+
+    const modifications = {
+      sport: valeurs.get("sport"),
+      evenement: valeurs.get("evenement").trim(),
+      equipe_domicile: valeurs.get("equipe_domicile").trim() || null,
+      equipe_exterieur: valeurs.get("equipe_exterieur").trim() || null,
+      pronostic: valeurs.get("pronostic").trim(),
+      cote: Number(valeurs.get("cote")),
+      confiance: Number(valeurs.get("confiance")),
+      analyse: valeurs.get("analyse").trim(),
+      categorie: valeurs.get("categorie"),
+      publie: valeurs.get("publie") === "true"
+    };
+
+    bouton.disabled = true;
+    message.textContent = "Enregistrement en cours...";
+
+    try {
+      const { error } = await adminClient
+        .from("pronostics")
+        .update(modifications)
+        .eq("id", id);
+
+      if (error) throw error;
+
+      message.textContent = "✅ Modifications enregistrées !";
+      await chargerDashboardAdmin();
+
+    } catch (error) {
+      message.textContent = "❌ Erreur : " + error.message;
+      bouton.disabled = false;
+    }
+  });
 }
 
 async function enregistrerPronostic(event) {
