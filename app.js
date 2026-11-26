@@ -707,6 +707,36 @@ adminDashboard.querySelectorAll("[data-edit-id]").forEach(bouton => {
     ouvrirEditionPronostic(bouton.dataset.editId, pronostics);
   });
 });
+  adminDashboard.querySelectorAll("[data-result-id]").forEach(bouton => {
+  bouton.addEventListener("click", async () => {
+    const id = bouton.dataset.resultId;
+
+    const select = adminDashboard.querySelector(
+      `[data-result-select="${id}"]`
+    );
+
+    const resultat = select.value;
+
+    bouton.disabled = true;
+    bouton.textContent = "ENREGISTREMENT...";
+
+    try {
+      const { error } = await adminClient
+        .from("pronostics")
+        .update({ resultat: resultat })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      await chargerDashboardAdmin();
+
+    } catch (error) {
+      alert("Erreur : " + error.message);
+      bouton.disabled = false;
+      bouton.textContent = "ENREGISTRER LE RÉSULTAT";
+    }
+  });
+});
   adminDashboard.querySelector("#adminRefresh")
     .addEventListener("click", chargerDashboardAdmin);
 
