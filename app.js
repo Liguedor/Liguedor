@@ -339,28 +339,11 @@ function normaliserSport(sport) {
   const s = String(sport ?? '').toLowerCase().trim();
 
   if (s === 'tous' || s === 'all') return 'tous';
+  if (s === 'football' || s === 'foot') return 'football';
+  if (s === 'tennis') return 'tennis';
 
-  if (s === 'football' || s === 'foot') {
-    return 'football';
-  }
-
-  if (s === 'tennis') {
-    return 'tennis';
-  }
-
-  const sportsMultisports = [
-    'basket',
-    'volleyball',
-    'mma',
-    'hockey',
-    'badminton',
-    'rugby',
-    'autres'
-  ];
-
-  if (sportsMultisports.includes(s)) {
-    return 'multisports';
-  }
+  return 'multisport';
+}
 
   return s;
 }
