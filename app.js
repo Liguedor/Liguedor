@@ -475,7 +475,86 @@ function afficherResultats() {
       }).join('')
     : '<p>Aucun résultat terminé pour le moment.</p>';
 }
+// =====================================
+// STATISTIQUES PUBLIQUES LIGUE D'OR
+// =====================================
 
+async function chargerStatistiques() {
+  const zone = document.querySelector('#stats .panel');
+  if (!zone) return;
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/rpc/statistiques_ligue_or`,
+      {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    const stats = await response.json();
+
+    function afficherCarte(titre, donnees) {
+      const gagnes = Number(donnees.gagnes || 0);
+      const perdus = Number(donnees.perdus || 0);
+      const attente = Number(donnees.en_attente || 0);
+      const total = Number(donnees.total || 0);
+      const termines = gagnes + perdus;
+      const taux = termines > 0
+        ? Math.round((gagnes / termines) * 100)
+        : 0;
+
+      return `
+        <div style="background:#171717;border:1px solid #b58a35;
+          border-radius:12px;padding:18px;margin-top:15px">
+          <h3 style="color:#e4bd62">${titre}</h3>
+          <p>Pronostics publiés : <b>${total}</b></p>
+          <p>Gagnés : <b>${gagnes}</b> ✅</p>
+          <p>Perdus : <b>${perdus}</b> ❌</p>
+          <p>En attente : <b>${attente}</b> ⏳</p>
+          <p style="color:#e4bd62;font-size:24px;font-weight:bold">
+            ${taux} %
+          </p>
+          <small>Taux de réussite</small>
+        </div>
+      `;
+    }
+
+    zone.innerHTML = `
+      <div class="section-head compact">
+        <div>
+          <p class="eyebrow">PERFORMANCES</p>
+          <h2>Statistiques <em>globales</em></h2>
+        </div>
+      </div>
+
+      <p>Découvrez les performances de LIGUE D’OR.</p>
+
+      ${afficherCarte('👑 PUBLIC', stats.public)}
+      ${afficherCarte('💎 VIP', stats.vip)}
+
+      <p class="tiny muted">
+        Le taux de réussite est calculé sur les pronostics gagnés et perdus.
+        Les pronostics en attente ne sont pas comptabilisés.
+      </p>
+    `;
+
+  } catch (error) {
+    console.error('Erreur statistiques :', error);
+    zone.innerHTML +=
+      '<p>Impossible de charger les statistiques pour le moment.</p>';
+  }
+}
+
+chargerStatistiques();
 /* Menu latéral premium LIGUE D'OR */
 const menuBtn = document.getElementById('menuBtn');
 const nav = document.getElementById('nav');
