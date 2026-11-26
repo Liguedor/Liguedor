@@ -563,13 +563,29 @@ function afficherAccueilAdmin(pronostics) {
     String(p.categorie || "").toLowerCase() === "vip"
   );
 
-  const gagnes = pronostics.filter(p => p.resultat === "gagne").length;
-  const perdus = pronostics.filter(p => p.resultat === "perdu").length;
-  const attente = pronostics.filter(p =>
-    !["gagne", "perdu", "annule", "annulé"].includes(
-      String(p.resultat || "").toLowerCase()
-    )
-  ).length;
+ const resultatNormalise = p =>
+  String(p.resultat || "en_attente").toLowerCase();
+
+const gagnes = pronostics.filter(p =>
+  resultatNormalise(p) === "gagne"
+).length;
+
+const perdus = pronostics.filter(p =>
+  resultatNormalise(p) === "perdu"
+).length;
+
+const rembourses = pronostics.filter(p =>
+  resultatNormalise(p) === "rembourse"
+).length;
+
+const annules = pronostics.filter(p =>
+  ["annule", "annulé"].includes(resultatNormalise(p))
+).length;
+
+const attente = pronostics.filter(p =>
+  !["gagne", "perdu", "rembourse", "annule", "annulé"]
+    .includes(resultatNormalise(p))
+).length;
 
   const lignes = pronostics.map(p => `
   <div data-pronostic-id="${esc(p.id)}"
@@ -601,6 +617,13 @@ function afficherAccueilAdmin(pronostics) {
       <div style="background:#222;padding:16px;border-radius:10px">
         <small>PRONOSTICS PUBLICS</small><h2>${publics.length}</h2>
       </div>
+      <div style="background:#222;padding:16px;border-radius:10px">
+  <small>REMBOURSÉS</small><h2>${rembourses}</h2>
+</div>
+
+<div style="background:#222;padding:16px;border-radius:10px">
+  <small>ANNULÉS</small><h2>${annules}</h2>
+</div>
       <div style="background:#222;padding:16px;border-radius:10px">
         <small>PRONOSTICS VIP</small><h2>${vips.length}</h2>
       </div>
