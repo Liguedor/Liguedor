@@ -588,29 +588,10 @@ function afficherAccueilAdmin(pronostics) {
     </div>
 
     <button type="button"
-      data-edit-id="${esc(p.id)}"
-      style="margin-top:12px;padding:10px;background:#d6ad52;border:0;border-radius:7px;font-weight:bold">
-      ✏️ MODIFIER
-      <div style="margin-top:12px">
-  <label>Résultat du pronostic</label>
-
-  <select data-result-select="${esc(p.id)}"
-    style="display:block;width:100%;padding:12px;margin-top:6px">
-    <option value="en_attente" ${p.resultat === "en_attente" ? "selected" : ""}>⏳ En attente</option>
-    <option value="gagne" ${p.resultat === "gagne" ? "selected" : ""}>🟢 Gagné</option>
-    <option value="perdu" ${p.resultat === "perdu" ? "selected" : ""}>🔴 Perdu</option>
-    <option value="rembourse" ${p.resultat === "rembourse" ? "selected" : ""}>🔵 Remboursé</option>
-    <option value="annule" ${p.resultat === "annule" || p.resultat === "annulé" ? "selected" : ""}>⚪ Annulé</option>
-  </select>
-
-  <button type="button"
-    data-result-id="${esc(p.id)}"
-    style="margin-top:8px;padding:10px;background:#d6ad52;border:0;border-radius:7px;font-weight:bold">
-    ENREGISTRER LE RÉSULTAT
-  </button>
-</div>
-    </button>
-  </div>
+  data-edit-id="${esc(p.id)}"
+  style="margin-top:12px;padding:10px;background:#d6ad52;border:0;border-radius:7px;font-weight:bold">
+  ✏️ MODIFIER
+</button>
 `).join("");
   adminDashboard.innerHTML = `
     <h2 style="color:#e4bd62">👑 LIGUE D’OR — ADMIN</h2>
@@ -800,7 +781,14 @@ async function ouvrirEditionPronostic(id, pronostics) {
         <option value="public" ${p.categorie === "public" ? "selected" : ""}>Public</option>
         <option value="vip" ${p.categorie === "vip" ? "selected" : ""}>VIP</option>
       </select>
-
+<label>Résultat du pronostic</label>
+<select name="resultat" style="padding:12px">
+  <option value="en_attente" ${p.resultat === "en_attente" ? "selected" : ""}>⏳ En attente</option>
+  <option value="gagne" ${p.resultat === "gagne" ? "selected" : ""}>🟢 Gagné</option>
+  <option value="perdu" ${p.resultat === "perdu" ? "selected" : ""}>🔴 Perdu</option>
+  <option value="rembourse" ${p.resultat === "rembourse" ? "selected" : ""}>🔵 Remboursé</option>
+  <option value="annule" ${p.resultat === "annule" || p.resultat === "annulé" ? "selected" : ""}>⚪ Annulé</option>
+</select>
       <label>Publication</label>
       <select name="publie" style="padding:12px">
         <option value="false" ${!p.publie ? "selected" : ""}>Brouillon</option>
@@ -843,6 +831,7 @@ async function ouvrirEditionPronostic(id, pronostics) {
       confiance: Number(valeurs.get("confiance")),
       analyse: valeurs.get("analyse").trim(),
       categorie: valeurs.get("categorie"),
+      resultat: valeurs.get("resultat"),
       publie: valeurs.get("publie") === "true"
     };
 
