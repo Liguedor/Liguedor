@@ -345,7 +345,15 @@ function normaliserSport(sport) {
   return 'multisport';
 }
 
-  return s;
+function iconeSport(sport) {
+  const s = String(sport || '').toLowerCase();
+
+  if (s.includes('tennis')) return '🎾';
+  if (s.includes('basket') || s.includes('nba')) return '🏀';
+  if (s.includes('volley')) return '🏐';
+  if (s.includes('hockey')) return '🏒';
+
+  return '⚽';
 }
 
 function iconeSport(sport) {
