@@ -608,6 +608,15 @@ const attente = pronostics.filter(p =>
   style="margin-top:12px;padding:10px;background:#d6ad52;border:0;border-radius:7px;font-weight:bold">
   ✏️ MODIFIER
 </button>
+
+<button type="button"
+  data-delete-id="${esc(p.id)}"
+  style="margin-top:12px;margin-left:8px;padding:10px;background:#9b3030;color:white;border:0;border-radius:7px;font-weight:bold">
+  🗑️ SUPPRIMER
+</button>
+  style="margin-top:12px;padding:10px;background:#d6ad52;border:0;border-radius:7px;font-weight:bold">
+  ✏️ MODIFIER
+</button>
 `).join("");
   adminDashboard.innerHTML = `
     <h2 style="color:#e4bd62">👑 LIGUE D’OR — ADMIN</h2>
