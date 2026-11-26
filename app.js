@@ -479,20 +479,33 @@ function afficherResultats() {
 // STATISTIQUES PUBLIQUES LIGUE D'OR
 // =====================================
 
+
 async function chargerStatistiques() {
   const zone = document.querySelector('#stats .panel');
   if (!zone) return;
 
+  const sportChoisi =
+    document.getElementById('filtreSportStats')?.value || 'tous';
+
+  const periodeChoisie =
+    Number(document.getElementById('filtrePeriodeStats')?.value || 0);
+
+  zone.innerHTML = '<p>Chargement des statistiques...</p>';
+
   try {
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/rpc/statistiques_ligue_or`,
+      `${SUPABASE_URL}/rest/v1/rpc/statistiques_avancees_ligue_or`,
       {
         method: 'POST',
         headers: {
           apikey: SUPABASE_KEY,
           Authorization: `Bearer ${SUPABASE_KEY}`,
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+          p_sport: sportChoisi,
+          p_jours: periodeChoisie
+        })
       }
     );
 
@@ -507,23 +520,48 @@ async function chargerStatistiques() {
       const perdus = Number(donnees.perdus || 0);
       const attente = Number(donnees.en_attente || 0);
       const total = Number(donnees.total || 0);
+      const rembourses = Number(donnees.rembourses || 0);
+      const annules = Number(donnees.annules || 0);
+
       const termines = gagnes + perdus;
       const taux = termines > 0
         ? Math.round((gagnes / termines) * 100)
         : 0;
 
+      const sports = (donnees.par_sport || []).map(s => `
+        <div style="display:flex;justify-content:space-between;
+          gap:10px;padding:9px 0;border-bottom:1px solid #393939">
+          <b>${esc(s.sport)}</b>
+          <span>
+            ${Number(s.gagnes)} gagnés /
+            ${Number(s.perdus)} perdus
+          </span>
+        </div>
+      `).join('');
+
       return `
         <div style="background:#171717;border:1px solid #b58a35;
           border-radius:12px;padding:18px;margin-top:15px">
+
           <h3 style="color:#e4bd62">${titre}</h3>
+
           <p>Pronostics publiés : <b>${total}</b></p>
           <p>Gagnés : <b>${gagnes}</b> ✅</p>
           <p>Perdus : <b>${perdus}</b> ❌</p>
           <p>En attente : <b>${attente}</b> ⏳</p>
-          <p style="color:#e4bd62;font-size:24px;font-weight:bold">
+          <p>Remboursés : <b>${rembourses}</b></p>
+          <p>Annulés : <b>${annules}</b></p>
+
+          <p style="color:#e4bd62;font-size:28px;font-weight:bold">
             ${taux} %
           </p>
           <small>Taux de réussite</small>
+
+          <h4 style="color:#e4bd62;margin-top:20px">
+            Performances par sport
+          </h4>
+
+          ${sports || '<p>Aucune donnée sportive pour cette sélection.</p>'}
         </div>
       `;
     }
@@ -538,23 +576,59 @@ async function chargerStatistiques() {
 
       <p>Découvrez les performances de LIGUE D’OR.</p>
 
+      <div style="display:grid;gap:12px;margin:20px 0">
+        <label for="filtreSportStats">Filtrer par sport</label>
+        <select id="filtreSportStats" style="padding:12px;
+          border-radius:8px;background:#222;color:white">
+          <option value="tous">Tous les sports</option>
+          <option value="football">Football</option>
+          <option value="tennis">Tennis</option>
+          <option value="basket">Basket</option>
+          <option value="panier">Panier</option>
+          <option value="volleyball">Volleyball</option>
+          <option value="autres">Autres</option>
+        </select>
+
+        <label for="filtrePeriodeStats">Filtrer par période</label>
+        <select id="filtrePeriodeStats" style="padding:12px;
+          border-radius:8px;background:#222;color:white">
+          <option value="0">Depuis le lancement</option>
+          <option value="7">7 derniers jours</option>
+          <option value="30">30 derniers jours</option>
+          <option value="90">3 derniers mois</option>
+        </select>
+      </div>
+
       ${afficherCarte('👑 PUBLIC', stats.public)}
       ${afficherCarte('💎 VIP', stats.vip)}
 
       <p class="tiny muted">
         Le taux de réussite est calculé sur les pronostics gagnés et perdus.
-        Les pronostics en attente ne sont pas comptabilisés.
+        Les pronostics en attente, remboursés et annulés sont exclus du calcul.
       </p>
     `;
 
+    document.getElementById('filtreSportStats')
+      .value = sportChoisi;
+
+    document.getElementById('filtrePeriodeStats')
+      .value = String(periodeChoisie);
+
+    document.getElementById('filtreSportStats')
+      .addEventListener('change', chargerStatistiques);
+
+    document.getElementById('filtrePeriodeStats')
+      .addEventListener('change', chargerStatistiques);
+
   } catch (error) {
     console.error('Erreur statistiques :', error);
-    zone.innerHTML +=
+    zone.innerHTML =
       '<p>Impossible de charger les statistiques pour le moment.</p>';
   }
 }
 
 chargerStatistiques();
+
 /* Menu latéral premium LIGUE D'OR */
 const menuBtn = document.getElementById('menuBtn');
 const nav = document.getElementById('nav');
