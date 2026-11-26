@@ -961,10 +961,10 @@ async function ouvrirEditionPronostic(id, pronostics) {
     <form id="formEdition" style="display:grid;gap:10px">
       <label>Sport</label>
       <select name="sport" required style="padding:12px">
-        ${["football","tennis","basket","volleyball","autres"].map(s =>
-          `<option value="${s}" ${p.sport === s ? "selected" : ""}>${s.toUpperCase()}</option>`
-        ).join("")}
-      </select>
+  ${["football","tennis","multisport"].map(s =>
+    `<option value="${s}" ${normaliserSport(p.sport) === s ? "selected" : ""}>${s.toUpperCase()}</option>`
+  ).join("")}
+</select>
 
       <label>Événement / Match</label>
       <input name="evenement" required value="${esc(p.evenement)}" style="padding:12px">
