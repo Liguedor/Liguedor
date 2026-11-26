@@ -505,7 +505,27 @@ async function chargerStatistiques() {
     }
 
     const stats = await response.json();
+    const evolutionResponse = await fetch(
+      `${SUPABASE_URL}/rest/v1/rpc/statistiques_evolution_ligue_or`,
+      {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          p_sport: sportChoisi === 'multisports' ? 'multisport' : sportChoisi,
+          p_jours: periodeChoisie
+        })
+      }
+    );
 
+    if (!evolutionResponse.ok) {
+      throw new Error(await evolutionResponse.text());
+    }
+
+    const evolution = await evolutionResponse.json();
     function afficherCarte(titre, donnees) {
       const gagnes = Number(donnees.gagnes || 0);
       const perdus = Number(donnees.perdus || 0);
@@ -556,7 +576,82 @@ async function chargerStatistiques() {
         </div>
       `;
     }
+    function afficherEvolution(titre, donnees) {
+      const lignes = donnees || [];
 
+      if (!lignes.length) {
+        return `
+          <div style="background:#171717;border:1px solid #b58a35;
+            border-radius:12px;padding:18px;margin-top:15px">
+            <h3 style="color:#e4bd62">${titre}</h3>
+            <p>Aucune évolution disponible pour cette période.</p>
+          </div>
+        `;
+      }
+
+      const maximum = Math.max(
+        1,
+        ...lignes.flatMap(j => [
+          Number(j.gagnes || 0),
+          Number(j.perdus || 0)
+        ])
+      );
+
+      const contenu = lignes.map(j => {
+        const gagnes = Number(j.gagnes || 0);
+        const perdus = Number(j.perdus || 0);
+        const date = new Date(`${j.jour}T12:00:00`)
+          .toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit'
+          });
+
+        return `
+          <div style="display:grid;grid-template-columns:55px 1fr;
+            gap:10px;align-items:center;margin:13px 0">
+            <b style="color:#ddd">${date}</b>
+
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;
+                margin-bottom:5px">
+                <span style="width:48px;color:#8bd49b;font-size:12px">
+                  Gagnés
+                </span>
+                <div style="background:#292929;height:9px;flex:1;
+                  border-radius:10px;overflow:hidden">
+                  <div style="background:#3ca66b;height:100%;
+                    width:${gagnes / maximum * 100}%"></div>
+                </div>
+                <b>${gagnes}</b>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="width:48px;color:#ed8585;font-size:12px">
+                  Perdus
+                </span>
+                <div style="background:#292929;height:9px;flex:1;
+                  border-radius:10px;overflow:hidden">
+                  <div style="background:#c65353;height:100%;
+                    width:${perdus / maximum * 100}%"></div>
+                </div>
+                <b>${perdus}</b>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div style="background:#171717;border:1px solid #b58a35;
+          border-radius:12px;padding:18px;margin-top:15px">
+          <h3 style="color:#e4bd62">${titre}</h3>
+          <p style="font-size:12px;color:#aaa">
+            Évolution quotidienne des pronostics terminés
+          </p>
+          ${contenu}
+        </div>
+      `;
+    }
     zone.innerHTML = `
       <div class="section-head compact">
         <div>
@@ -589,7 +684,8 @@ async function chargerStatistiques() {
 
       ${afficherCarte('👑 PUBLIC', stats.public)}
       ${afficherCarte('💎 VIP', stats.vip)}
-
+      ${afficherEvolution('📈 ÉVOLUTION PUBLIC', evolution.public)}
+      ${afficherEvolution('💎 ÉVOLUTION VIP', evolution.vip)}
       <p class="tiny muted">
         Le taux de réussite est calculé sur les pronostics gagnés et perdus.
         Les pronostics en attente, remboursés et annulés sont exclus du calcul.
