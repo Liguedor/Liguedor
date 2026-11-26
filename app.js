@@ -720,6 +720,38 @@ adminDashboard.querySelectorAll("[data-edit-id]").forEach(bouton => {
     ouvrirEditionPronostic(bouton.dataset.editId, pronostics);
   });
 });
+  adminDashboard.querySelectorAll("[data-delete-id]").forEach(bouton => {
+  bouton.addEventListener("click", async () => {
+    const id = bouton.dataset.deleteId;
+
+    const confirmation = confirm(
+      "Attention : veux-tu vraiment supprimer définitivement ce pronostic ?"
+    );
+
+    if (!confirmation) return;
+
+    bouton.disabled = true;
+    bouton.textContent = "SUPPRESSION...";
+
+    try {
+      const { error } = await adminClient
+        .from("pronostics")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      alert("Pronostic supprimé avec succès !");
+
+      await chargerDashboardAdmin();
+
+    } catch (error) {
+      alert("Erreur lors de la suppression : " + error.message);
+      bouton.disabled = false;
+      bouton.textContent = "🗑️ SUPPRIMER";
+    }
+  });
+});
   adminDashboard.querySelectorAll("[data-result-id]").forEach(bouton => {
   bouton.addEventListener("click", async () => {
     const id = bouton.dataset.resultId;
