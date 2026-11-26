@@ -570,15 +570,12 @@ async function chargerStatistiques() {
       <div style="display:grid;gap:12px;margin:20px 0">
         <label for="filtreSportStats">Filtrer par sport</label>
         <select id="filtreSportStats" style="padding:12px;
-          border-radius:8px;background:#222;color:white">
-          <option value="tous">Tous les sports</option>
-          <option value="football">Football</option>
-          <option value="tennis">Tennis</option>
-          <option value="basket">Basket</option>
-          <option value="panier">Panier</option>
-          <option value="volleyball">Volleyball</option>
-          <option value="autres">Autres</option>
-        </select>
+  border-radius:8px;background:#222;color:white">
+  <option value="tous">Tous les sports</option>
+  <option value="football">Football</option>
+  <option value="tennis">Tennis</option>
+  <option value="multisport">Multisport</option>
+</select>
 
         <label for="filtrePeriodeStats">Filtrer par période</label>
         <select id="filtrePeriodeStats" style="padding:12px;
