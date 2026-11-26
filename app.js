@@ -805,11 +805,9 @@ const attente = pronostics.filter(p =>
       <label>Sport</label>
       <select name="sport" required style="padding:12px">
   <option value="">Choisir une catégorie</option>
-  <option value="football">FOOTBALL</option>
-  <option value="tennis">TENNIS</option>
-  <option value="basket">BASKET</option>
-  <option value="volleyball">VOLLEY</option>
-  <option value="autres">MMA / HOCKEY / BADMINTON / RUGBY</option>
+<option value="football">FOOTBALL</option>
+<option value="tennis">TENNIS</option>
+<option value="multisport">MULTISPORT</option>
 </select>
 
       <label>Événement / Match</label>
